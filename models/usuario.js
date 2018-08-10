@@ -14,7 +14,7 @@ var usuarioSchema = new Schema({
     email: { type: String, unique: true, required: [true, 'El correo es necesario'] },
     password: { type: String, required: [true, 'La contraseña es necesario'] },
     img: { type: String, required: false },
-    role: { type: String, required: true, default: 'RIEM_ROLE', enum: rolesValidos },
+    role: { type: String, required: true, default: 'REIM_ROLE', enum: rolesValidos },
     reset_password_token: { type: String },
     reset_password_expires: { type: Date }
 }, { collection: 'usuarios' });

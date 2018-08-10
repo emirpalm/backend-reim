@@ -7,7 +7,6 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 // Inicializar variables
 var app = express();
 
-// Models
 var Usuario = require('../models/usuario');
 
 // =======================================
@@ -40,41 +39,8 @@ app.get('/', (req, res, netx) => {
             })
 });
 
-// =======================================
-// Crear Usuarios
-// =======================================
 
-app.post('/', (req, res) => {
 
-    var body = req.body;
-
-    var usuario = new Usuario({
-        nombre: body.nombre,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        img: body.img,
-        role: body.role
-    });
-
-    usuario.save((err, usuarioGuardado) => {
-
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                mensaje: 'Error al crear usuario',
-                errores: err
-            });
-        }
-        usuarioGuardado.password = '=)';
-        res.status(201).json({
-            ok: true,
-            usuario: usuarioGuardado,
-            usuarioToken: req.usuario
-        });
-
-    });
-
-});
 
 // =======================================
 // Actualizar Usuarios
@@ -127,6 +93,44 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 });
 
+
+
+// =======================================
+// Crear Usuarios
+// =======================================
+
+app.post('/', (req, res) => {
+
+    var body = req.body;
+
+    var usuario = new Usuario({
+        nombre: body.nombre,
+        email: body.email,
+        password: bcrypt.hashSync(body.password, 10),
+        img: body.img,
+        role: body.role
+    });
+
+    usuario.save((err, usuarioGuardado) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Error al crear usuario',
+                errores: err
+            });
+        }
+        usuarioGuardado.password = '=)';
+        res.status(201).json({
+            ok: true,
+            usuario: usuarioGuardado,
+            usuarioToken: req.usuario
+        });
+
+    });
+
+});
+
 // =======================================
 // Borrar Usuarios
 // =======================================
@@ -158,7 +162,6 @@ app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
         });
     });
 });
-
 
 // export
 module.exports = app;
