@@ -25,6 +25,11 @@ var usuarioRoutes = require('./routes/usuario');
 var loginRoutes = require('./routes/login');
 var imagenesRoutes = require('./routes/imagenes');
 var maniobraRoutes = require('./routes/maniobra');
+var operadorRoutes = require('./routes/operador');
+var placasRoutes = require('./routes/placas');
+var contenedorRoutes = require('./routes/contenedor');
+var clienteRoutes = require('./routes/cliente');
+var buesquedaRoutes = require('./routes/busqueda');
 
 // Conexión a la base de datos Mongoose
 mongoose.connect('mongodb://localhost:27017/reim', { useNewUrlParser: true }, (err, res) => {
@@ -34,6 +39,11 @@ mongoose.connect('mongodb://localhost:27017/reim', { useNewUrlParser: true }, (e
 
 
 // Rutas
+app.use('/busqueda', buesquedaRoutes)
+app.use('/cliente', clienteRoutes)
+app.use('/contenedor', contenedorRoutes)
+app.use('/placas', placasRoutes)
+app.use('/operador', operadorRoutes)
 app.use('/maniobra', maniobraRoutes)
 app.use('/img', imagenesRoutes)
 app.use('/upload', uploadRoutes)

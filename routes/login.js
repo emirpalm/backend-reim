@@ -9,6 +9,9 @@ var app = express();
 
 var Usuario = require('../models/usuario');
 
+// ==========================================
+//  Autenticación normal
+// ==========================================
 app.post('/', (req, res) => {
 
     var body = req.body;
@@ -34,7 +37,7 @@ app.post('/', (req, res) => {
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas = pass',
+                mensaje: 'Credenciales incorrectas - password',
                 errores: err
             });
         }
@@ -47,10 +50,43 @@ app.post('/', (req, res) => {
             ok: true,
             usuario: usuarioDB,
             token: token,
-            id: usuarioDB._id
+            id: usuarioDB._id,
+            menu: obtenerMenu(usuarioDB.role)
         });
     });
 
+    function obtenerMenu(ROLE) {
+
+        var menu = [{
+                titulo: 'Principal',
+                icono: 'mdi mdi-gauge',
+                submenu: [
+                    { titulo: 'Dashboard', url: '/dashboard' },
+                    { titulo: 'Maniobras', url: '/maniobras' }
+                ]
+            },
+            {
+                titulo: 'Mantenimientos',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
+                    // { titulo: 'Usuarios', url: '/usuarios' },
+                    // { titulo: 'Hospitales', url: '/hospitales' },
+                    // { titulo: 'Médicos', url: '/medicos' }
+                ]
+            }
+        ];
+
+        console.log('ROLE', ROLE);
+
+        if (ROLE === 'ADMIN_ROLE') {
+            menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
+            menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
+        }
+
+
+        return menu;
+
+    }
 
 });
 
