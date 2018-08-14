@@ -8,6 +8,7 @@ var app = express();
 
 // Models
 var Usuario = require('../models/usuario');
+var Operador = require('../models/operador');
 
 // default options
 app.use(fileUpload());
@@ -18,7 +19,7 @@ app.put('/:tipo/:id', (req, res, next) => {
     var id = req.params.id;
 
     // tipos de colección
-    var tiposValidos = ['usuarios'];
+    var tiposValidos = ['usuarios', 'operadores'];
     if (tiposValidos.indexOf(tipo) < 0) {
         return res.status(400).json({
             ok: false,
@@ -127,6 +128,40 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
         });
 
+    }
+
+    if (tipo === 'operadores') {
+
+        Operador.findById(id, (err, operador) => {
+
+            if (!operador) {
+                return res.status(400).json({
+                    ok: true,
+                    mensaje: 'Operador no existe',
+                    errors: { message: 'Operador no existe' }
+                });
+            }
+
+            var pathViejo = './uploads/operadores/' + operador.img;
+
+            // Si existe, elimina la imagen anterior
+            if (fs.existsSync(pathViejo)) {
+                fs.unlink(pathViejo);
+            }
+
+            operador.img = nombreArchivo;
+
+            operador.save((err, operadorActualizado) => {
+
+                return res.status(200).json({
+                    ok: true,
+                    mensaje: 'Imagen de operador actualizada',
+                    operador: operadorActualizado
+                });
+
+            })
+
+        });
     }
 
 

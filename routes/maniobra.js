@@ -17,6 +17,10 @@ app.get('/', (req, res, netx) => {
     Maniobra.find({})
         .skip(desde)
         .limit(5)
+        .populate('operador')
+        .populate('placas')
+        .populate('contenedor')
+        .populate('cliente')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -49,20 +53,20 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var maniobra = new Maniobra({
         entrada: body.entrada,
         salida: body.salida,
-        operador: body.operador,
-        placas: body.placas,
         fletera: body.fletera,
-        contenedor: body.contenedor,
         aa: body.aa,
-        cliente: body.cliente,
         inicio: body.inicio,
         fin: body.fin,
-        carga: body.carga,
-        desc: body.desc,
+        transporte: body.transporte,
         lavado: body.lavado,
         rep: body.rep,
         tipo: body.tipo,
         grado: body.grado,
+        fechaCreado: Date.now(),
+        operador: body.operador,
+        placas: body.placas,
+        contenedor: body.contenedor,
+        cliente: body.cliente,
         usuario: req.usuario._id
 
     });
@@ -112,20 +116,20 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
         maniobra.entrada = body.entrada,
             maniobra.salida = body.salida,
-            maniobra.operador = body.operador,
-            maniobra.placas = body.placas,
             maniobra.fletera = body.fletera,
-            maniobra.contenedor = body.contenedor,
             maniobra.aa = body.aa,
-            maniobra.cliente = body.cliente,
             maniobra.inicio = body.inicio,
             maniobra.fin = body.fin,
-            maniobra.carga = body.carga,
-            maniobra.desc = body.desc,
+            maniobra.transporte = body.transporte,
             maniobra.lavado = body.lavado,
             maniobra.rep = body.rep,
             maniobra.tipo = body.tipo,
             maniobra.grado = body.grado,
+            maniobra.fechaModificado = Date.now(),
+            maniobra.operador = body.operador,
+            maniobra.placas = body.placas,
+            maniobra.contenedor = body.contenedor,
+            maniobra.cliente = body.cliente,
             maniobra.usuario = req.usuario._id;
 
 

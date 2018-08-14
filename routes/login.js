@@ -69,9 +69,10 @@ app.post('/', (req, res) => {
                 titulo: 'Mantenimientos',
                 icono: 'mdi mdi-folder-lock-open',
                 submenu: [
-                    // { titulo: 'Usuarios', url: '/usuarios' },
-                    // { titulo: 'Hospitales', url: '/hospitales' },
-                    // { titulo: 'Médicos', url: '/medicos' }
+                    { titulo: 'Operadores', url: '/operadores' },
+                    { titulo: 'Placas', url: '/placas' },
+                    { titulo: 'Contenedores', url: '/contenedores' },
+                    { titulo: 'Clientes', url: '/clientes' }
                 ]
             }
         ];
