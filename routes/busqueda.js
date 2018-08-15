@@ -7,6 +7,7 @@ var Placa = require('../models/placas');
 var Operador = require('../models/operador');
 var Contenedor = require('../models/contenedor');
 var Cliente = require('../models/cliente');
+var Maniobra = require('../models/maniobra');
 
 // ==============================
 // Busqueda por colección
@@ -41,10 +42,14 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
             promesa = buscarClientes(busqueda, regex);
             break;
 
+        case 'maniobras':
+            promesa = buscarManiobras(busqueda, regex);
+            break;
+
         default:
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Los tipos de busqueda sólo son: usuarios, operadores, placas, contenedores, clientes',
+                mensaje: 'Los tipos de busqueda sólo son: usuarios, operadores, placas, contenedores, clientes, maniobras',
                 error: { message: 'Tipo de tabla/coleccion no válido' }
             });
 
@@ -76,6 +81,7 @@ app.get('/todo/:busqueda', (req, res, next) => {
             buscarPlacas(busqueda, regex),
             buscarContenedores(busqueda, regex),
             buscarClientes(busqueda, regex),
+            buscarManiobras(busqueda, regex),
             buscarUsuarios(busqueda, regex)
 
         ])
@@ -87,7 +93,8 @@ app.get('/todo/:busqueda', (req, res, next) => {
                 placas: respuestas[1],
                 contenedores: respuestas[2],
                 clientes: respuestas[3],
-                usuarios: respuestas[4]
+                maniobras: respuestas[4],
+                usuarios: respuestas[5]
             });
         })
 
@@ -163,6 +170,26 @@ function buscarClientes(busqueda, regex) {
     });
 }
 
+function buscarManiobras(busqueda, regex) {
+
+    return new Promise((resolve, reject) => {
+
+        Maniobra.find({ maniobra: regex })
+            .populate('operador', 'operador')
+            .populate('placas', 'placas')
+            .populate('contenedor', 'contenedor')
+            .populate('cliente', 'cliente')
+            .populate('usuario', 'nombre email')
+            .exec((err, maniobra) => {
+
+                if (err) {
+                    reject('Error al cargar maniobras', err);
+                } else {
+                    resolve(maniobra)
+                }
+            });
+    });
+}
 
 function buscarUsuarios(busqueda, regex) {
 

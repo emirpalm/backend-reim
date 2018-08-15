@@ -17,10 +17,10 @@ app.get('/', (req, res, netx) => {
     Maniobra.find({})
         .skip(desde)
         .limit(5)
-        .populate('operador')
-        .populate('placas')
-        .populate('contenedor')
-        .populate('cliente')
+        .populate('operador', 'operador')
+        .populate('placas', 'placa')
+        .populate('contenedor', 'contenedor')
+        .populate('cliente', 'cliente')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -41,6 +41,80 @@ app.get('/', (req, res, netx) => {
 
             })
 });
+
+// =======================================
+// Obtener Maniobra por rango de fechas
+// =======================================
+app.get('/', (req, res, netx) => {
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+    var fechainicio = req.query.fechainicio;
+    var fechaFin = req.query.fechaFin;
+
+    Maniobra.find({ "fechaCreado": { "$gte": fechainicio, "$lte": fechaFin } })
+        .skip(desde)
+        .limit(5)
+        .populate('operador', 'operador')
+        .populate('placas', 'placa')
+        .populate('contenedor', 'contenedor')
+        .populate('cliente', 'cliente')
+        .populate('usuario', 'nombre email')
+        .exec(
+            (err, maniobras) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error cargando maniobras'
+                    });
+                }
+                Maniobra.countDocuments({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        maniobras,
+                        total: conteo
+                    });
+
+                })
+
+            })
+});
+
+
+// ==========================================
+//  Obtener Maniobra por ID
+// ==========================================
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Maniobra.findById(id)
+        .populate('operador', 'operador')
+        .populate('placas', 'placa')
+        .populate('contenedor', 'contenedor')
+        .populate('cliente', 'cliente')
+        .populate('usuario', 'nombre email')
+        .exec((err, maniobras) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar la maniobra',
+                    errors: err
+                });
+            }
+
+            if (!maniobras) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'La maniobra con el id ' + id + 'no existe',
+                    errors: { message: 'No existe maniobra con ese ID' }
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                maniobras: maniobras
+            });
+        })
+})
 
 // =======================================
 // Crear Maniobra
