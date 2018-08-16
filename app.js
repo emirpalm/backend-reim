@@ -8,7 +8,7 @@ var cors = require('cors');
 var app = express();
 
 app.use(cors({
-    origin: 'http://localhost:4200'
+    origin: 'http://www.mieryteran.com.mx'
 }));
 
 
@@ -32,7 +32,7 @@ var clienteRoutes = require('./routes/cliente');
 var buesquedaRoutes = require('./routes/busqueda');
 
 // Conexión a la base de datos Mongoose
-mongoose.connect('mongodb://localhost:27017/reim', { useNewUrlParser: true }, (err, res) => {
+mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { useNewUrlParser: true }, (err, res) => {
     if (err) throw err;
     console.log('Base de datos Mongoose: \x1b[32m%s\x1b[0m', 'online');
 })
