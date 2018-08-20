@@ -61,50 +61,51 @@ app.post('/', (req, res) => {
         var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 }) // 4hrs
 
         res.status(200).json({
-
             ok: true,
             usuario: usuarioDB,
             token: token,
             id: usuarioDB._id,
             menu: obtenerMenu(usuarioDB.role)
         });
-    });
 
-    function obtenerMenu(ROLE) {
+    })
 
-        var menu = [{
-                titulo: 'Principal',
-                icono: 'mdi mdi-gauge',
-                submenu: [
-                    { titulo: 'Dashboard', url: '/dashboard' },
-                    { titulo: 'Maniobras', url: '/maniobras' }
-                ]
-            },
-            {
-                titulo: 'Mantenimientos',
-                icono: 'mdi mdi-folder-lock-open',
-                submenu: [
-                    { titulo: 'Operadores', url: '/operadores' },
-                    { titulo: 'Placas', url: '/placas' },
-                    { titulo: 'Contenedores', url: '/contenedores' },
-                    { titulo: 'Clientes', url: '/clientes' }
-                ]
-            }
-        ];
-
-        console.log('ROLE', ROLE);
-
-        if (ROLE === 'ADMIN_ROLE') {
-            menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
-            menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
-        }
-
-
-        return menu;
-
-    }
 
 });
+
+function obtenerMenu(ROLE) {
+
+    var menu = [{
+            titulo: 'Principal',
+            icono: 'mdi mdi-gauge',
+            submenu: [
+                { titulo: 'Dashboard', url: '/dashboard' },
+                { titulo: 'Maniobras', url: '/maniobras' }
+            ]
+        },
+        {
+            titulo: 'Mantenimientos',
+            icono: 'mdi mdi-folder-lock-open',
+            submenu: [
+                { titulo: 'Operadores', url: '/operadores' },
+                { titulo: 'Placas', url: '/placas' },
+                { titulo: 'Contenedores', url: '/contenedores' },
+                { titulo: 'Clientes', url: '/clientes' }
+            ]
+        }
+    ];
+
+    console.log('ROLE', ROLE);
+
+    if (ROLE === 'ADMIN_ROLE') {
+        menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
+        menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
+    }
+
+
+    return menu;
+
+}
 
 // export
 module.exports = app;
