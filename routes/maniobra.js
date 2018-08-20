@@ -45,15 +45,16 @@ app.get('/', (req, res, netx) => {
 // =======================================
 // Obtener Maniobra por rango de fechas
 // =======================================
-app.get('/', (req, res, netx) => {
+app.get('/rangofecha', (req, res, netx) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
-    var fechainicio = req.query.fechainicio;
+    var fechaInicio = req.query.fechaInicio;
     var fechaFin = req.query.fechaFin;
+    fechaInicio = new Date(fechaInicio);
+    fechaFin = new Date(fechaFin);
 
-    Maniobra.find({ "fechaCreado": { "$gte": fechainicio, "$lte": fechaFin } })
-        .skip(desde)
-        .limit(5)
+
+    Maniobra.find({ "fechaCreado": { "$gte": fechaInicio, "$lte": fechaFin } })
         .populate('operador', 'operador')
         .populate('placas', 'placa')
         .populate('contenedor', 'contenedor')

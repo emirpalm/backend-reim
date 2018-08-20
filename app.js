@@ -8,7 +8,8 @@ var cors = require('cors');
 var app = express();
 
 app.use(cors({
-    origin: 'http://www.mieryteran.com.mx'
+    // origin: 'http://www.mieryteran.com.mx'
+    origin: 'http://localhost:4200'
 }));
 
 
