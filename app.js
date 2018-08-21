@@ -31,6 +31,8 @@ var placasRoutes = require('./routes/placas');
 var contenedorRoutes = require('./routes/contenedor');
 var clienteRoutes = require('./routes/cliente');
 var buesquedaRoutes = require('./routes/busqueda');
+var forgotpass = require('./routes/forgotpass');
+var resetpass = require('./routes/resetpass');
 
 // Conexión a la base de datos Mongoose
 mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { useNewUrlParser: true }, (err, res) => {
@@ -40,6 +42,8 @@ mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { use
 
 
 // Rutas
+app.use('/reset_password', resetpass)
+app.use('/forgot_password', forgotpass)
 app.use('/busqueda', buesquedaRoutes)
 app.use('/cliente', clienteRoutes)
 app.use('/contenedor', contenedorRoutes)
