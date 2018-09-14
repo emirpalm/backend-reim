@@ -9,6 +9,7 @@ var app = express();
 // Models
 var Usuario = require('../models/usuario');
 var Operador = require('../models/operador');
+var Maniobra = require('../models/maniobra');
 
 // default options
 app.use(fileUpload());
@@ -19,7 +20,7 @@ app.put('/:tipo/:id', (req, res, next) => {
     var id = req.params.id;
 
     // tipos de colección
-    var tiposValidos = ['usuarios', 'operadores'];
+    var tiposValidos = ['usuarios', 'operadores', 'maniobras'];
     if (tiposValidos.indexOf(tipo) < 0) {
         return res.status(400).json({
             ok: false,
@@ -121,6 +122,42 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
                     ok: true,
                     mensaje: 'Imagen de usuario actualizada',
                     usuario: usuarioActualizado
+                });
+
+            })
+
+
+        });
+
+    }
+
+    if (tipo === 'maniobras') {
+
+        Maniobra.findById(id, (err, maniobra) => {
+
+            if (!maniobra) {
+                return res.status(400).json({
+                    ok: true,
+                    mensaje: 'Maniobra no existe',
+                    errors: { message: 'Maniobra no existe' }
+                });
+            }
+
+            var pathViejo = './uploads/maniobras/' + maniobra.img;
+
+            // Si existe, elimina la imagen anterior
+            if (fs.existsSync(pathViejo)) {
+                fs.unlinkSync(pathViejo);
+            }
+
+            maniobra.imglavado = nombreArchivo;
+
+            maniobra.save((err, maniobraActualizado) => {
+
+                return res.status(200).json({
+                    ok: true,
+                    mensaje: 'Imagen de maniobra actualizada',
+                    maniobra: maniobraActualizado
                 });
 
             })

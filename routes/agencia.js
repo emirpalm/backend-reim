@@ -4,36 +4,36 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 
 var app = express();
 
-var Contenedor = require('../models/contenedor');
+var Agencia = require('../models/agencia');
 
 // ==========================================
-// Obtener todas los contenedores
+// Obtener todas las agencias aduanales
 // ==========================================
 app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Contenedor.find({})
+    Agencia.find({})
         .skip(desde)
         .limit(5)
         .populate('usuario', 'nombre email')
         .exec(
-            (err, contenedor) => {
+            (err, agencia) => {
 
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error al cargar contenedores',
+                        mensaje: 'Error al cargar agencias',
                         errors: err
                     });
                 }
 
-                Contenedor.countDocuments({}, (err, conteo) => {
+                Agencia.countDocuments({}, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
-                        contenedor: contenedor,
+                        agencia: agencia,
                         total: conteo
                     });
                 })
@@ -42,33 +42,33 @@ app.get('/', (req, res, next) => {
 });
 
 // ==========================================
-//  Obtener contenedores por ID
+//  Obtener Agencias por ID
 // ==========================================
 app.get('/:id', (req, res) => {
 
     var id = req.params.id;
 
-    Contenedor.findById(id)
+    Agencia.findById(id)
         .populate('usuario', 'nombre img email')
-        .exec((err, contenedor) => {
+        .exec((err, agencia) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
-                    mensaje: 'Error al buscar contenedor',
+                    mensaje: 'Error al buscar agencias',
                     errors: err
                 });
             }
 
-            if (!contenedor) {
+            if (!agencia) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'El Ccontenedor con el id ' + id + 'no existe',
-                    errors: { message: 'No existe un contenedor con ese ID' }
+                    mensaje: 'La agencia con el id ' + id + 'no existe',
+                    errors: { message: 'No existe una agencia con ese ID' }
                 });
             }
             res.status(200).json({
                 ok: true,
-                contenedor: contenedor
+                agencia: agencia
             });
         })
 })
@@ -78,50 +78,51 @@ app.get('/:id', (req, res) => {
 
 
 // ==========================================
-// Actualizar Contenedor
+// Actualizar Agencias
 // ==========================================
 app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
 
-    Contenedor.findById(id, (err, contenedor) => {
+    Agencia.findById(id, (err, agencia) => {
 
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al buscar placas',
+                mensaje: 'Error al buscar agencia',
                 errors: err
             });
         }
 
-        if (!contenedor) {
+        if (!agencia) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'El contenedor con el id ' + id + ' no existe',
-                errors: { message: 'No existe contenedor con ese ID' }
+                mensaje: 'La agencia con el id ' + id + ' no existe',
+                errors: { message: 'No existe agencia con ese ID' }
             });
         }
 
 
-        contenedor.contenedor = body.contenedor;
-        contenedor.tipo = body.tipo;
-        contenedor.usuario = req.usuario._id;
+        agencia.nombre = body.nombre;
+        agencia.rfc = body.rfc;
+        agencia.patente = body.patente;
+        agencia.usuario = req.usuario._id;
 
-        contenedor.save((err, contenedorGuardado) => {
+        agencia.save((err, agenciaGuardado) => {
 
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al actualizar contenedor',
+                    mensaje: 'Error al actualizar agencia',
                     errors: err
                 });
             }
 
             res.status(200).json({
                 ok: true,
-                contenedor: contenedorGuardado
+                agencia: agenciaGuardado
             });
 
         });
@@ -133,31 +134,32 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ==========================================
-// Crear nuevos contenedores
+// Crear nuevos clientes
 // ==========================================
 app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
     var body = req.body;
 
-    var contenedor = new Contenedor({
-        contenedor: body.contenedor,
-        tipo: body.tipo,
+    var agencia = new Agencia({
+        nombre: body.nombre,
+        rfc: body.rfc,
+        patente: body.patente,
         usuario: req.usuario._id
     });
 
-    contenedor.save((err, contenedorGuardado) => {
+    agencia.save((err, agenciaGuardado) => {
 
         if (err) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Error al crear contenedor',
+                mensaje: 'Error al crear agencia',
                 errors: err
             });
         }
 
         res.status(201).json({
             ok: true,
-            contenedor: contenedorGuardado
+            agencia: agenciaGuardado
         });
 
 
@@ -167,33 +169,33 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ============================================
-//   Borrar contenedor por el id
+//   Borrar agencias por el id
 // ============================================
 app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
 
-    Contenedor.findByIdAndRemove(id, (err, contenedorBorrado) => {
+    Agencia.findByIdAndRemove(id, (err, agenciaBorrado) => {
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al borrar contenedor',
+                mensaje: 'Error al borrar agencia',
                 errors: err
             });
         }
 
-        if (!contenedorBorrado) {
+        if (!agenciaBorrado) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'No existe contenedor con ese id',
-                errors: { message: 'No existe contenedor con ese id' }
+                mensaje: 'No existe agencia con ese id',
+                errors: { message: 'No existe agencia con ese id' }
             });
         }
 
         res.status(200).json({
             ok: true,
-            contenedor: contenedorBorrado
+            agencia: agenciaBorrado
         });
 
     });

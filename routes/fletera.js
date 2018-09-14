@@ -4,36 +4,36 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 
 var app = express();
 
-var Contenedor = require('../models/contenedor');
+var Fletera = require('../models/fletera');
 
 // ==========================================
-// Obtener todas los contenedores
+// Obtener todas los fleteras
 // ==========================================
 app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Contenedor.find({})
+    Fletera.find({})
         .skip(desde)
         .limit(5)
         .populate('usuario', 'nombre email')
         .exec(
-            (err, contenedor) => {
+            (err, fletera) => {
 
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error al cargar contenedores',
+                        mensaje: 'Error al cargar fleteras',
                         errors: err
                     });
                 }
 
-                Contenedor.countDocuments({}, (err, conteo) => {
+                Fletera.countDocuments({}, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
-                        contenedor: contenedor,
+                        fletera: fletera,
                         total: conteo
                     });
                 })
@@ -42,33 +42,33 @@ app.get('/', (req, res, next) => {
 });
 
 // ==========================================
-//  Obtener contenedores por ID
+//  Obtener Fleteras por ID
 // ==========================================
 app.get('/:id', (req, res) => {
 
     var id = req.params.id;
 
-    Contenedor.findById(id)
+    Fletera.findById(id)
         .populate('usuario', 'nombre img email')
-        .exec((err, contenedor) => {
+        .exec((err, fletera) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
-                    mensaje: 'Error al buscar contenedor',
+                    mensaje: 'Error al buscar fletera',
                     errors: err
                 });
             }
 
-            if (!contenedor) {
+            if (!fletera) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'El Ccontenedor con el id ' + id + 'no existe',
-                    errors: { message: 'No existe un contenedor con ese ID' }
+                    mensaje: 'La fletera con el id ' + id + 'no existe',
+                    errors: { message: 'No existe un fletera con ese ID' }
                 });
             }
             res.status(200).json({
                 ok: true,
-                contenedor: contenedor
+                fletera: fletera
             });
         })
 })
@@ -78,50 +78,50 @@ app.get('/:id', (req, res) => {
 
 
 // ==========================================
-// Actualizar Contenedor
+// Actualizar Fletera
 // ==========================================
 app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
 
-    Contenedor.findById(id, (err, contenedor) => {
+    Fletera.findById(id, (err, fletera) => {
 
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al buscar placas',
+                mensaje: 'Error al buscar fletera',
                 errors: err
             });
         }
 
-        if (!contenedor) {
+        if (!fletera) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'El contenedor con el id ' + id + ' no existe',
-                errors: { message: 'No existe contenedor con ese ID' }
+                mensaje: 'La fletera con el id ' + id + ' no existe',
+                errors: { message: 'No existe fletera con ese ID' }
             });
         }
 
 
-        contenedor.contenedor = body.contenedor;
-        contenedor.tipo = body.tipo;
-        contenedor.usuario = req.usuario._id;
+        fletera.nombre = body.nombre;
+        fletera.rfc = body.rfc;
+        fletera.usuario = req.usuario._id;
 
-        contenedor.save((err, contenedorGuardado) => {
+        fletera.save((err, fleteraGuardado) => {
 
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al actualizar contenedor',
+                    mensaje: 'Error al actualizar fletera',
                     errors: err
                 });
             }
 
             res.status(200).json({
                 ok: true,
-                contenedor: contenedorGuardado
+                fletera: fleteraGuardado
             });
 
         });
@@ -133,31 +133,31 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ==========================================
-// Crear nuevos contenedores
+// Crear nuevas fleteras
 // ==========================================
 app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
     var body = req.body;
 
-    var contenedor = new Contenedor({
-        contenedor: body.contenedor,
-        tipo: body.tipo,
+    var fletera = new Fletera({
+        nombre: body.nombre,
+        rfc: body.rfc,
         usuario: req.usuario._id
     });
 
-    contenedor.save((err, contenedorGuardado) => {
+    fletera.save((err, fleteraGuardado) => {
 
         if (err) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Error al crear contenedor',
+                mensaje: 'Error al crear fletera',
                 errors: err
             });
         }
 
         res.status(201).json({
             ok: true,
-            contenedor: contenedorGuardado
+            fletera: fleteraGuardado
         });
 
 
@@ -167,33 +167,33 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ============================================
-//   Borrar contenedor por el id
+//   Borrar fleteras por el id
 // ============================================
 app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
 
-    Contenedor.findByIdAndRemove(id, (err, contenedorBorrado) => {
+    Fletera.findByIdAndRemove(id, (err, fleteraBorrado) => {
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al borrar contenedor',
+                mensaje: 'Error al borrar fletera',
                 errors: err
             });
         }
 
-        if (!contenedorBorrado) {
+        if (!fleteraBorrado) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'No existe contenedor con ese id',
-                errors: { message: 'No existe contenedor con ese id' }
+                mensaje: 'No existe fletera con ese id',
+                errors: { message: 'No existe fletera con ese id' }
             });
         }
 
         res.status(200).json({
             ok: true,
-            contenedor: contenedorBorrado
+            fletera: fleteraBorrado
         });
 
     });

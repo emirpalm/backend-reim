@@ -1,6 +1,7 @@
 // Requires
 var express = require('express');
 var mdAutenticacion = require('../middlewares/autenticacion');
+var moment = require('moment');
 
 // Inicializar variables
 var app = express();
@@ -18,9 +19,18 @@ app.get('/', (req, res, netx) => {
         .skip(desde)
         .limit(5)
         .populate('operador', 'operador')
-        .populate('placas', 'placa')
-        .populate('contenedor', 'contenedor')
+        .populate({
+            path: "camiones",
+            select: 'placa numbereconomico',
+            populate: {
+                path: "fletera",
+                select: 'nombre'
+            }
+        })
+        .populate('contenedor', 'contenedor tipo')
         .populate('cliente', 'cliente')
+        .populate('agencia', 'nombre')
+        .populate('fletera', 'nombre')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -43,6 +53,61 @@ app.get('/', (req, res, netx) => {
 });
 
 // =======================================
+// Obtener Maniobra de hoy
+// =======================================
+app.get('/hoy', (req, res, netx) => {
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+    var fechaInicio = string;
+    var myDate = new Date(fechaInicio).now();
+    var y = myDate.getFullYear();
+    var m = myDate.getMonth();
+    m += 1;
+    var d = myDate.getUTCDate();
+    var newdate = (y + "-" + m + "-" + d);
+    //fechaaInicio = new Date(fechaInicio).toISOString();
+    // var inicioDate = fechaInicio + "T00:00:00.000Z";
+    // fechaaFin = new Date(fechaFin).toISOString();
+    var inicioDate = newdate + "T00:00:00.000Z";
+    // fechaaFin = new Date(inicioDate);
+    //    .find({"fecha" : {"$gt" : ISODate("2014-10-18T00:00:00")}})
+    Maniobra.find({ "fechaCreado": { "$gt": inicioDate } })
+        .populate('operador', 'operador')
+        .populate({
+            path: "camiones",
+            select: 'placa numbereconomico',
+            populate: {
+                path: "fletera",
+                select: 'nombre'
+            }
+        })
+        .populate('contenedor', 'contenedor tipo')
+        .populate('cliente', 'cliente')
+        .populate('agencia', 'nombre')
+        .populate('fletera', 'nombre')
+        .populate('usuario', 'nombre email')
+        .exec(
+            (err, maniobras) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error cargando maniobras'
+                    });
+                }
+                Maniobra.countDocuments({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        maniobras,
+                        total: conteo
+                    });
+
+                })
+
+            })
+});
+
+
+// =======================================
 // Obtener Maniobra por rango de fechas
 // =======================================
 app.get('/rangofecha', (req, res, netx) => {
@@ -50,15 +115,26 @@ app.get('/rangofecha', (req, res, netx) => {
     desde = Number(desde);
     var fechaInicio = req.query.fechaInicio;
     var fechaFin = req.query.fechaFin;
-    fechaInicio = new Date(fechaInicio);
-    fechaFin = new Date(fechaFin);
+    fechaaInicio = new Date(fechaInicio).toISOString();
+    // var inicioDate = fechaInicio + "T00:00:00.000Z";
+    // fechaaFin = new Date(fechaFin).toISOString();
+    var finDate = fechaFin + "T23:59:59.999Z";
+    fechaaFin = new Date(finDate);
 
-
-    Maniobra.find({ "fechaCreado": { "$gte": fechaInicio, "$lte": fechaFin } })
+    Maniobra.find({ "fechaCreado": { "$gte": fechaaInicio, "$lte": fechaaFin } })
         .populate('operador', 'operador')
-        .populate('placas', 'placa')
-        .populate('contenedor', 'contenedor')
+        .populate({
+            path: "camiones",
+            select: 'placa numbereconomico',
+            populate: {
+                path: "fletera",
+                select: 'nombre'
+            }
+        })
+        .populate('contenedor', 'contenedor tipo')
         .populate('cliente', 'cliente')
+        .populate('agencia', 'nombre')
+        .populate('fletera', 'nombre')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -90,9 +166,18 @@ app.get('/:id', (req, res) => {
 
     Maniobra.findById(id)
         .populate('operador', 'operador')
-        .populate('placas', 'placa')
-        .populate('contenedor', 'contenedor')
+        .populate({
+            path: "camiones",
+            select: 'placa numbereconomico',
+            populate: {
+                path: "fletera",
+                select: 'nombre'
+            }
+        })
+        .populate('contenedor', 'contenedor tipo')
         .populate('cliente', 'cliente')
+        .populate('agencia', 'nombre')
+        .populate('fletera', 'nombre')
         .populate('usuario', 'nombre email')
         .exec((err, maniobras) => {
             if (err) {
@@ -128,20 +213,17 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var maniobra = new Maniobra({
         entrada: body.entrada,
         salida: body.salida,
-        fletera: body.fletera,
-        aa: body.aa,
         inicio: body.inicio,
         fin: body.fin,
         transporte: body.transporte,
         lavado: body.lavado,
         rep: body.rep,
-        tipo: body.tipo,
         grado: body.grado,
-        fechaCreado: Date.now(),
         operador: body.operador,
-        placas: body.placas,
+        camiones: body.camion,
         contenedor: body.contenedor,
         cliente: body.cliente,
+        agencia: body.agencia,
         usuario: req.usuario._id
 
     });
@@ -191,20 +273,18 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
         maniobra.entrada = body.entrada,
             maniobra.salida = body.salida,
-            maniobra.fletera = body.fletera,
-            maniobra.aa = body.aa,
             maniobra.inicio = body.inicio,
             maniobra.fin = body.fin,
             maniobra.transporte = body.transporte,
             maniobra.lavado = body.lavado,
             maniobra.rep = body.rep,
-            maniobra.tipo = body.tipo,
             maniobra.grado = body.grado,
             maniobra.fechaModificado = Date.now(),
             maniobra.operador = body.operador,
             maniobra.placas = body.placas,
             maniobra.contenedor = body.contenedor,
             maniobra.cliente = body.cliente,
+            maniobra.agencia = body.agencia,
             maniobra.usuario = req.usuario._id;
 
 

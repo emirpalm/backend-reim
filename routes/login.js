@@ -88,9 +88,12 @@ function obtenerMenu(ROLE) {
             icono: 'mdi mdi-folder-lock-open',
             submenu: [
                 { titulo: 'Operadores', url: '/operadores' },
-                { titulo: 'Placas', url: '/placas' },
+                { titulo: 'Camiones', url: '/camiones' },
                 { titulo: 'Contenedores', url: '/contenedores' },
-                { titulo: 'Clientes', url: '/clientes' }
+                { titulo: 'Viajes', url: '/viajes' },
+                { titulo: 'Clientes', url: '/clientes' },
+                { titulo: 'Agencias', url: '/agencias' },
+                { titulo: 'Fleteras', url: '/fleteras' }
             ]
         }
     ];

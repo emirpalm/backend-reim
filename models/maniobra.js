@@ -10,27 +10,25 @@ var transporteValidos = {
 
 var maniobraSchema = new Schema({
     entrada: { type: String, required: [true, 'La entrada es necesario'] },
-    salida: { type: String, required: [false, 'La salida es	necesario'] },
-    fletera: { type: String, required: [true, 'La fletera es necesario'] },
-    aa: { type: String, required: [true, 'La AA es necesario'] },
-    inicio: { type: String, required: [false, 'El inicio es necesario'] },
-    fin: { type: String, required: [false, 'El fin es necesario'] },
+    salida: { type: String },
+    inicio: { type: String },
+    fin: { type: String },
     transporte: { type: String, required: true, default: 'Carga', enum: transporteValidos },
     lavado: { type: String, required: [false, 'La lavado es necesario'] },
     rep: { type: String, required: [false, 'La rep es necesario'] },
-    tipo: { type: String, required: [true, 'El tipo es necesario'] },
     grado: { type: String, required: [true, 'El grado es necesario'] },
-    fechaCreado: { type: Date },
+    imglavado: { type: String, required: false },
+    fechaCreado: { type: Date, default: Date.now },
     fechaModificado: { type: Date },
     operador: {
         type: Schema.Types.ObjectId,
         ref: 'Operador',
         required: [true, 'El id operador es un campo obligatorio ']
     },
-    placas: {
+    camiones: {
         type: Schema.Types.ObjectId,
-        ref: 'Placa',
-        required: [true, 'El id placas es un campo obligatorio ']
+        ref: 'Camion',
+        required: [true, 'El id camiones es un campo obligatorio ']
     },
     contenedor: {
         type: Schema.Types.ObjectId,
@@ -41,6 +39,11 @@ var maniobraSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Cliente',
         required: [true, 'El id Cliente es un campo obligatorio ']
+    },
+    agencia: {
+        type: Schema.Types.ObjectId,
+        ref: 'Agencia',
+        required: [true, 'El id Agencia es un campo obligatorio ']
     },
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
 }, { collection: 'maniobras' });

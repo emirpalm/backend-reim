@@ -3,11 +3,13 @@ var express = require('express');
 var app = express();
 
 var Usuario = require('../models/usuario');
-var Placa = require('../models/placas');
+var Camion = require('../models/camion');
 var Operador = require('../models/operador');
 var Contenedor = require('../models/contenedor');
 var Cliente = require('../models/cliente');
 var Maniobra = require('../models/maniobra');
+var Fletera = require('../models/fletera');
+var Agencia = require('../models/agencia');
 
 // ==============================
 // Busqueda por colección
@@ -30,8 +32,8 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
             promesa = buscarOperadores(busqueda, regex);
             break;
 
-        case 'placas':
-            promesa = buscarPlacas(busqueda, regex);
+        case 'camiones':
+            promesa = buscarCamiones(busqueda, regex);
             break;
 
         case 'contenedores':
@@ -42,6 +44,14 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
             promesa = buscarClientes(busqueda, regex);
             break;
 
+        case 'agencias':
+            promesa = buscarAgencias(busqueda, regex);
+            break;
+
+        case 'fleteras':
+            promesa = buscarFleteras(busqueda, regex);
+            break;
+
         case 'maniobras':
             promesa = buscarManiobras(busqueda, regex);
             break;
@@ -49,7 +59,7 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
         default:
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Los tipos de busqueda sólo son: usuarios, operadores, placas, contenedores, clientes, maniobras',
+                mensaje: 'Los tipos de busqueda sólo son: usuarios, operadores, camiones, contenedores, clientes, maniobras, fleteras y agencias',
                 error: { message: 'Tipo de tabla/coleccion no válido' }
             });
 
@@ -78,9 +88,11 @@ app.get('/todo/:busqueda', (req, res, next) => {
 
     Promise.all([
             buscarOperadores(busqueda, regex),
-            buscarPlacas(busqueda, regex),
+            buscarCamiones(busqueda, regex),
             buscarContenedores(busqueda, regex),
             buscarClientes(busqueda, regex),
+            buscarAgencias(busqueda, regex),
+            buscarFleteras(busqueda, regex),
             buscarManiobras(busqueda, regex),
             buscarUsuarios(busqueda, regex)
 
@@ -90,11 +102,13 @@ app.get('/todo/:busqueda', (req, res, next) => {
             res.status(200).json({
                 ok: true,
                 operadores: respuestas[0],
-                placas: respuestas[1],
+                camiones: respuestas[1],
                 contenedores: respuestas[2],
                 clientes: respuestas[3],
-                maniobras: respuestas[4],
-                usuarios: respuestas[5]
+                agencias: respuestas[4],
+                fleteras: respuestas[5],
+                maniobras: respuestas[6],
+                usuarios: respuestas[7]
             });
         })
 
@@ -119,18 +133,18 @@ function buscarOperadores(busqueda, regex) {
     });
 }
 
-function buscarPlacas(busqueda, regex) {
+function buscarCamiones(busqueda, regex) {
 
     return new Promise((resolve, reject) => {
 
-        Placa.find({ placa: regex })
+        Camion.find({ camion: regex })
             .populate('usuario', 'nombre email img')
-            .exec((err, placas) => {
+            .exec((err, camiones) => {
 
                 if (err) {
-                    reject('Error al cargar placas', err);
+                    reject('Error al cargar camiones', err);
                 } else {
-                    resolve(placas)
+                    resolve(camiones)
                 }
             });
     });
@@ -165,6 +179,40 @@ function buscarClientes(busqueda, regex) {
                     reject('Error al cargar clientes', err);
                 } else {
                     resolve(clientes)
+                }
+            });
+    });
+}
+
+function buscarAgencias(busqueda, regex) {
+
+    return new Promise((resolve, reject) => {
+
+        Agencia.find({ nombre: regex })
+            .populate('usuario', 'nombre email img')
+            .exec((err, agencias) => {
+
+                if (err) {
+                    reject('Error al cargar agencias', err);
+                } else {
+                    resolve(agencias)
+                }
+            });
+    });
+}
+
+function buscarFleteras(busqueda, regex) {
+
+    return new Promise((resolve, reject) => {
+
+        Fletera.find({ nombre: regex })
+            .populate('usuario', 'nombre email img')
+            .exec((err, fleteras) => {
+
+                if (err) {
+                    reject('Error al cargar fleteras', err);
+                } else {
+                    resolve(fleteras)
                 }
             });
     });

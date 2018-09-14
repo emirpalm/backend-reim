@@ -4,36 +4,37 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 
 var app = express();
 
-var Placa = require('../models/placas');
+var Viaje = require('../models/viajes');
 
 // ==========================================
-// Obtener todas las Placas
+// Obtener todas los viajes
 // ==========================================
 app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Placa.find({})
+    Viaje.find({})
         .skip(desde)
         .limit(5)
+        .populate('contenedores.contenedor', 'contenedor')
         .populate('usuario', 'nombre email')
         .exec(
-            (err, placas) => {
+            (err, viaje) => {
 
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error al cargar placas',
+                        mensaje: 'Error al cargar viajes',
                         errors: err
                     });
                 }
 
-                Placa.countDocuments({}, (err, conteo) => {
+                Viaje.countDocuments({}, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
-                        placas: placas,
+                        viaje: viaje,
                         total: conteo
                     });
                 })
@@ -42,33 +43,34 @@ app.get('/', (req, res, next) => {
 });
 
 // ==========================================
-//  Obtener Placas por ID
+//  Obtener viajes por ID
 // ==========================================
 app.get('/:id', (req, res) => {
 
     var id = req.params.id;
 
-    Placa.findById(id)
+    Viaje.findById(id)
+        .populate('contenedores.contenedor', 'contenedor')
         .populate('usuario', 'nombre img email')
-        .exec((err, placas) => {
+        .exec((err, viaje) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
-                    mensaje: 'Error al buscar la placa',
+                    mensaje: 'Error al buscar viaje',
                     errors: err
                 });
             }
 
-            if (!placas) {
+            if (!viaje) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'La placa con el id ' + id + 'no existe',
-                    errors: { message: 'No existe una placa con ese ID' }
+                    mensaje: 'El viaje con el id ' + id + 'no existe',
+                    errors: { message: 'No existe un viaje con ese ID' }
                 });
             }
             res.status(200).json({
                 ok: true,
-                placas: placas
+                viaje: viaje
             });
         })
 })
@@ -78,49 +80,51 @@ app.get('/:id', (req, res) => {
 
 
 // ==========================================
-// Actualizar Placa
+// Actualizar Viaje
 // ==========================================
 app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
 
-    Placa.findById(id, (err, placas) => {
+    Viaje.findById(id, (err, viaje) => {
 
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al buscar placas',
+                mensaje: 'Error al buscar viaje',
                 errors: err
             });
         }
 
-        if (!placas) {
+        if (!viaje) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Las placas con el id ' + id + ' no existe',
-                errors: { message: 'No existe placas con ese ID' }
+                mensaje: 'El viaje con el id ' + id + ' no existe',
+                errors: { message: 'No existe viaje con ese ID' }
             });
         }
 
 
-        placas.placa = body.placa;
-        placas.usuario = req.usuario._id;
+        viaje.viaje = body.viaje;
+        viaje.contenedores = [{ contenedor: body.contenedor }];
+        viaje.fechaviaje = body.fechaviaje;
+        viaje.usuario = req.usuario._id;
 
-        placas.save((err, placaGuardado) => {
+        viaje.save((err, viajeGuardado) => {
 
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al actualizar placas',
+                    mensaje: 'Error al actualizar viaje',
                     errors: err
                 });
             }
 
             res.status(200).json({
                 ok: true,
-                placas: placaGuardado
+                viaje: viajeGuardado
             });
 
         });
@@ -132,30 +136,31 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ==========================================
-// Crear nuevas placas
+// Crear nuevos viajes
 // ==========================================
 app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
     var body = req.body;
 
-    var placa = new Placa({
-        placa: body.placa,
+    var viaje = new Viaje({
+        viaje: body.viaje,
+        contenedores: body.contenedor,
         usuario: req.usuario._id
     });
 
-    placa.save((err, placaGuardado) => {
+    viaje.save((err, viajeGuardado) => {
 
         if (err) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Error al crear placas',
+                mensaje: 'Error al crear viaje',
                 errors: err
             });
         }
 
         res.status(201).json({
             ok: true,
-            placa: placaGuardado
+            viaje: viajeGuardado
         });
 
 
@@ -165,33 +170,33 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ============================================
-//   Borrar placas por el id
+//   Borrar viaje por el id
 // ============================================
 app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
 
-    Placa.findByIdAndRemove(id, (err, placaBorrado) => {
+    Viaje.findByIdAndRemove(id, (err, viajeBorrado) => {
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al borrar placa',
+                mensaje: 'Error al borrar viaje',
                 errors: err
             });
         }
 
-        if (!placaBorrado) {
+        if (!viajeBorrado) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'No existe placas con ese id',
-                errors: { message: 'No existe placas con ese id' }
+                mensaje: 'No existe viaje con ese id',
+                errors: { message: 'No existe viaje con ese id' }
             });
         }
 
         res.status(200).json({
             ok: true,
-            placa: placaBorrado
+            viaje: viajeBorrado
         });
 
     });

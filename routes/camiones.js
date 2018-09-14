@@ -4,36 +4,37 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 
 var app = express();
 
-var Contenedor = require('../models/contenedor');
+var Camion = require('../models/camion');
 
 // ==========================================
-// Obtener todas los contenedores
+// Obtener todos los camiones
 // ==========================================
 app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Contenedor.find({})
+    Camion.find({})
         .skip(desde)
         .limit(5)
+        .populate('fletera', 'nombre')
         .populate('usuario', 'nombre email')
         .exec(
-            (err, contenedor) => {
+            (err, camiones) => {
 
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error al cargar contenedores',
+                        mensaje: 'Error al cargar camiones',
                         errors: err
                     });
                 }
 
-                Contenedor.countDocuments({}, (err, conteo) => {
+                Camion.countDocuments({}, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
-                        contenedor: contenedor,
+                        camiones: camiones,
                         total: conteo
                     });
                 })
@@ -42,33 +43,34 @@ app.get('/', (req, res, next) => {
 });
 
 // ==========================================
-//  Obtener contenedores por ID
+//  Obtener Camiones por ID
 // ==========================================
 app.get('/:id', (req, res) => {
 
     var id = req.params.id;
 
-    Contenedor.findById(id)
+    Camion.findById(id)
+        .populate('fletera', 'nombre')
         .populate('usuario', 'nombre img email')
-        .exec((err, contenedor) => {
+        .exec((err, camiones) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
-                    mensaje: 'Error al buscar contenedor',
+                    mensaje: 'Error al buscar el camion',
                     errors: err
                 });
             }
 
-            if (!contenedor) {
+            if (!camiones) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'El Ccontenedor con el id ' + id + 'no existe',
-                    errors: { message: 'No existe un contenedor con ese ID' }
+                    mensaje: 'el camion con el id ' + id + 'no existe',
+                    errors: { message: 'No existe un camion con ese ID' }
                 });
             }
             res.status(200).json({
                 ok: true,
-                contenedor: contenedor
+                camiones: camiones
             });
         })
 })
@@ -78,50 +80,51 @@ app.get('/:id', (req, res) => {
 
 
 // ==========================================
-// Actualizar Contenedor
+// Actualizar Camion
 // ==========================================
 app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
 
-    Contenedor.findById(id, (err, contenedor) => {
+    Camion.findById(id, (err, camiones) => {
 
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al buscar placas',
+                mensaje: 'Error al buscar camiones',
                 errors: err
             });
         }
 
-        if (!contenedor) {
+        if (!camiones) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'El contenedor con el id ' + id + ' no existe',
-                errors: { message: 'No existe contenedor con ese ID' }
+                mensaje: 'Las camiones con el id ' + id + ' no existe',
+                errors: { message: 'No existe camiones con ese ID' }
             });
         }
 
 
-        contenedor.contenedor = body.contenedor;
-        contenedor.tipo = body.tipo;
-        contenedor.usuario = req.usuario._id;
+        camiones.placa = body.placa;
+        camiones.numbereconomico = body.numbereconomico;
+        camiones.fletera = body.fletera;
+        camiones.usuario = req.usuario._id;
 
-        contenedor.save((err, contenedorGuardado) => {
+        camiones.save((err, camionGuardado) => {
 
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al actualizar contenedor',
+                    mensaje: 'Error al actualizar camiones',
                     errors: err
                 });
             }
 
             res.status(200).json({
                 ok: true,
-                contenedor: contenedorGuardado
+                camiones: camionGuardado
             });
 
         });
@@ -133,31 +136,32 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ==========================================
-// Crear nuevos contenedores
+// Crear nuevos camiones
 // ==========================================
 app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
     var body = req.body;
 
-    var contenedor = new Contenedor({
-        contenedor: body.contenedor,
-        tipo: body.tipo,
+    var camion = new Camion({
+        placa: body.placa,
+        numbereconomico: body.numbereconomico,
+        fletera: body.fletera,
         usuario: req.usuario._id
     });
 
-    contenedor.save((err, contenedorGuardado) => {
+    camion.save((err, camionGuardado) => {
 
         if (err) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Error al crear contenedor',
+                mensaje: 'Error al crear camiones',
                 errors: err
             });
         }
 
         res.status(201).json({
             ok: true,
-            contenedor: contenedorGuardado
+            camion: camionGuardado
         });
 
 
@@ -167,33 +171,33 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ============================================
-//   Borrar contenedor por el id
+//   Borrar camiones por el id
 // ============================================
 app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
 
-    Contenedor.findByIdAndRemove(id, (err, contenedorBorrado) => {
+    Camion.findByIdAndRemove(id, (err, camionBorrado) => {
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al borrar contenedor',
+                mensaje: 'Error al borrar camion',
                 errors: err
             });
         }
 
-        if (!contenedorBorrado) {
+        if (!camionBorrado) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'No existe contenedor con ese id',
-                errors: { message: 'No existe contenedor con ese id' }
+                mensaje: 'No existe camiones con ese id',
+                errors: { message: 'No existe camiones con ese id' }
             });
         }
 
         res.status(200).json({
             ok: true,
-            contenedor: contenedorBorrado
+            camion: camionBorrado
         });
 
     });

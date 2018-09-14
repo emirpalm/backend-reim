@@ -7,10 +7,14 @@ var cors = require('cors');
 // Inicializar variables
 var app = express();
 
-app.use(cors({
-    // origin: 'http://www.mieryteran.com.mx'
-    origin: 'http://localhost:4200'
-}));
+var corsOptions = {
+    origin: '*',
+    methods: ['POST, GET, PUT, DELETE, OPTIONS'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'contentType', 'Content-Type', 'Accept', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 
 
 // Body Parser
@@ -27,9 +31,12 @@ var loginRoutes = require('./routes/login');
 var imagenesRoutes = require('./routes/imagenes');
 var maniobraRoutes = require('./routes/maniobra');
 var operadorRoutes = require('./routes/operador');
-var placasRoutes = require('./routes/placas');
+var camionRoutes = require('./routes/camiones');
 var contenedorRoutes = require('./routes/contenedor');
 var clienteRoutes = require('./routes/cliente');
+var agenciaRoutes = require('./routes/agencia');
+var fleteraRoutes = require('./routes/fletera');
+var viajesRoutes = require('./routes/viaje');
 var buesquedaRoutes = require('./routes/busqueda');
 var forgotpass = require('./routes/forgotpass');
 var resetpass = require('./routes/resetpass');
@@ -45,9 +52,12 @@ mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { use
 app.use('/reset_password', resetpass)
 app.use('/forgot_password', forgotpass)
 app.use('/busqueda', buesquedaRoutes)
+app.use('/viaje', viajesRoutes)
+app.use('/fletera', fleteraRoutes)
+app.use('/agencia', agenciaRoutes)
 app.use('/cliente', clienteRoutes)
 app.use('/contenedor', contenedorRoutes)
-app.use('/placas', placasRoutes)
+app.use('/camion', camionRoutes)
 app.use('/operador', operadorRoutes)
 app.use('/maniobra', maniobraRoutes)
 app.use('/img', imagenesRoutes)
