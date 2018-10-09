@@ -6,16 +6,15 @@ var vacioimportacionValidos = {
     message: '{VALUE} no esta permitido'
 };
 
-const subSchema = new Schema({
-    contenedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Contenedor', required: true },
-    vacioimportacion: { type: String, required: [true, 'Es necesario'] }
-
-});
 
 var viajeSchema = new Schema({
     viaje: { type: String, required: [true, 'El viaje es necesario'] },
-    contenedores: [subSchema],
-    fechaviaje: { type: Date, default: Date.now },
+    buque: { type: Schema.Types.ObjectId, ref: 'Buque', required: true },
+    naviera: { type: Schema.Types.ObjectId, ref: 'Naviera', required: true },
+    contenedor: { type: String, required: [true, 'El contenedor es necesario'] },
+    tipo: { type: String, required: [true, 'El tipo es necesario'] },
+    vacioimportacion: { type: String, required: true, default: 'Vacio', enum: vacioimportacionValidos },
+    fechaArrivo: { type: Date, default: Date.now },
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
 }, { collection: 'viajes' });
 

@@ -17,7 +17,7 @@ var maniobraSchema = new Schema({
     lavado: { type: String, required: [false, 'La lavado es necesario'] },
     rep: { type: String, required: [false, 'La rep es necesario'] },
     grado: { type: String, required: [true, 'El grado es necesario'] },
-    imglavado: { type: String, required: false },
+    imgfolder: { type: String, required: false },
     fechaCreado: { type: Date, default: Date.now },
     fechaModificado: { type: Date },
     operador: {

@@ -17,7 +17,8 @@ app.get('/', (req, res, next) => {
     Viaje.find({})
         .skip(desde)
         .limit(5)
-        .populate('contenedores.contenedor', 'contenedor')
+        .populate('buque', 'buque')
+        .populate('naviera', 'naviera')
         .populate('usuario', 'nombre email')
         .exec(
             (err, viaje) => {
@@ -50,8 +51,9 @@ app.get('/:id', (req, res) => {
     var id = req.params.id;
 
     Viaje.findById(id)
-        .populate('contenedores.contenedor', 'contenedor')
-        .populate('usuario', 'nombre img email')
+        .populate('buque', 'buque')
+        .populate('naviera', 'naviera')
+        .populate('usuario', 'nombre email')
         .exec((err, viaje) => {
             if (err) {
                 return res.status(500).json({
@@ -66,6 +68,40 @@ app.get('/:id', (req, res) => {
                     ok: false,
                     mensaje: 'El viaje con el id ' + id + 'no existe',
                     errors: { message: 'No existe un viaje con ese ID' }
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                viaje: viaje
+            });
+        })
+})
+
+// ==========================================
+//  Obtener viajes por numero
+// ==========================================
+app.get('/numero/:viaje', (req, res) => {
+
+    var viaje = req.params.viaje;
+
+    Viaje.find({ viaje: viaje })
+        .populate('buque', 'buque')
+        .populate('naviera', 'naviera')
+        .populate('usuario', 'nombre img email')
+        .exec((err, viaje) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar viaje',
+                    errors: err
+                });
+            }
+
+            if (!viaje) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'El viaje con el numero' + viaje + 'no existe',
+                    errors: { message: 'No existe un viaje con ese Numero' }
                 });
             }
             res.status(200).json({
@@ -108,9 +144,12 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 
         viaje.viaje = body.viaje;
-        viaje.contenedores = [{ contenedor: body.contenedor }];
-        viaje.fechaviaje = body.fechaviaje;
-        viaje.usuario = req.usuario._id;
+        viaje.buque = body.buque;
+        viaje.naviera = body.naviera;
+        viaje.contenedor = body.contenedor;
+        viaje.tipo = body.tipo;
+        viaje.vacioimportacion = body.vacioimportacion,
+            viaje.usuario = req.usuario._id;
 
         viaje.save((err, viajeGuardado) => {
 
@@ -144,7 +183,11 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
     var viaje = new Viaje({
         viaje: body.viaje,
-        contenedores: body.contenedor,
+        buque: body.buque,
+        naviera: body.naviera,
+        contenedor: body.contenedor,
+        tipo: body.tipo,
+        vacioimportacion: body.vacioimportacion,
         usuario: req.usuario._id
     });
 
