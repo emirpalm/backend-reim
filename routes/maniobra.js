@@ -31,6 +31,7 @@ app.get('/', (req, res, netx) => {
         .populate('cliente', 'cliente')
         .populate('agencia', 'nombre')
         .populate('fletera', 'nombre')
+        .populate('viaje', 'viaje')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -85,6 +86,7 @@ app.get('/hoy', (req, res, netx) => {
         .populate('cliente', 'cliente')
         .populate('agencia', 'nombre')
         .populate('fletera', 'nombre')
+        .populate('viaje', 'viaje')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -135,6 +137,7 @@ app.get('/rangofecha', (req, res, netx) => {
         .populate('cliente', 'cliente')
         .populate('agencia', 'nombre')
         .populate('fletera', 'nombre')
+        .populate('viaje', 'viaje')
         .populate('usuario', 'nombre email')
         .exec(
             (err, maniobras) => {
@@ -178,6 +181,7 @@ app.get('/:id', (req, res) => {
         .populate('cliente', 'cliente')
         .populate('agencia', 'nombre')
         .populate('fletera', 'nombre')
+        .populate('viaje', 'viaje')
         .populate('usuario', 'nombre email')
         .exec((err, maniobras) => {
             if (err) {
@@ -224,6 +228,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         contenedor: body.contenedor,
         cliente: body.cliente,
         agencia: body.agencia,
+        viaje: body.viaje,
         usuario: req.usuario._id
 
     });
@@ -285,6 +290,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
             maniobra.contenedor = body.contenedor,
             maniobra.cliente = body.cliente,
             maniobra.agencia = body.agencia,
+            maniobra.viaje = body.viaje,
             maniobra.usuario = req.usuario._id;
 
 

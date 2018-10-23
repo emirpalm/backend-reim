@@ -132,36 +132,23 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
     }
 
     if (tipo === 'maniobras') {
+        var img = { "img": nombreArchivo };
+        Maniobra.findByIdAndUpdate(id, { $push: { imgs: img } }, (err, maniobra) => {
+            {
 
-        Maniobra.findById(id, (err, maniobra) => {
+                if (!maniobra) {
+                    return res.status(400).json({
+                        ok: true,
+                        mensaje: 'Maniobra no existe',
+                        errors: { message: 'Maniobra no existe' }
+                    });
+                }
 
-            if (!maniobra) {
-                return res.status(400).json({
+                res.status(201).json({
                     ok: true,
-                    mensaje: 'Maniobra no existe',
-                    errors: { message: 'Maniobra no existe' }
+                    maniobra: maniobra
                 });
             }
-
-            var pathViejo = './uploads/maniobras/' + maniobra.img;
-
-            // Si existe, elimina la imagen anterior
-            if (fs.existsSync(pathViejo)) {
-                fs.unlinkSync(pathViejo);
-            }
-
-            maniobra.imglavado = nombreArchivo;
-
-            maniobra.save((err, maniobraActualizado) => {
-
-                return res.status(200).json({
-                    ok: true,
-                    mensaje: 'Imagen de maniobra actualizada',
-                    maniobra: maniobraActualizado
-                });
-
-            })
-
 
         });
 

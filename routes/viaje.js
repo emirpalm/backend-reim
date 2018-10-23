@@ -19,6 +19,7 @@ app.get('/', (req, res, next) => {
         .limit(5)
         .populate('buque', 'buque')
         .populate('naviera', 'naviera')
+        .populate('contenedores.contenedor')
         .populate('usuario', 'nombre email')
         .exec(
             (err, viaje) => {
@@ -53,6 +54,7 @@ app.get('/:id', (req, res) => {
     Viaje.findById(id)
         .populate('buque', 'buque')
         .populate('naviera', 'naviera')
+        .populate('contenedores.contenedor')
         .populate('usuario', 'nombre email')
         .exec((err, viaje) => {
             if (err) {
@@ -87,7 +89,8 @@ app.get('/numero/:viaje', (req, res) => {
     Viaje.find({ viaje: viaje })
         .populate('buque', 'buque')
         .populate('naviera', 'naviera')
-        .populate('usuario', 'nombre img email')
+        .populate('contenedores.contenedor')
+        .populate('usuario', 'nombre email')
         .exec((err, viaje) => {
             if (err) {
                 return res.status(500).json({
@@ -146,10 +149,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
         viaje.viaje = body.viaje;
         viaje.buque = body.buque;
         viaje.naviera = body.naviera;
-        viaje.contenedor = body.contenedor;
-        viaje.tipo = body.tipo;
-        viaje.vacioimportacion = body.vacioimportacion,
-            viaje.usuario = req.usuario._id;
+        viaje.usuario = req.usuario._id;
 
         viaje.save((err, viajeGuardado) => {
 
@@ -172,6 +172,79 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
 });
 
+// ==========================================
+// Añadir contenedores del viaje
+// ==========================================
+app.put('/add/:id', mdAutenticacion.verificaToken, (req, res) => {
+
+    var id = req.params.id;
+    var body = req.body;
+    var contenedor = { "contenedor": body.contenedor, "vacioimportacion": body.vacioimportacion };
+
+    Viaje.findByIdAndUpdate(id, { $push: { contenedores: contenedor } }, (err, viaje) => {
+
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar viaje',
+                errors: err
+            });
+        }
+
+        if (!viaje) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El viaje con el id ' + id + ' no existe',
+                errors: { message: 'No existe viaje con ese ID' }
+            });
+        } else {
+            res.status(201).json({
+                ok: true,
+                viaje: viaje
+            });
+        }
+    });
+
+});
+
+// ==========================================
+// Remover contenedores del viaje
+// ==========================================
+app.put('/remove/:id&:contenedor', mdAutenticacion.verificaToken, (req, res) => {
+
+    var id = req.params.id;
+    var body = req.body;
+    var contenedor = { "contenedor": req.params.contenedor };
+
+    Viaje.findByIdAndUpdate(id, { $pull: { contenedores: contenedor } }, (err, viaje) => {
+
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar viaje',
+                errors: err
+            });
+        }
+
+        if (!viaje) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El viaje con el id ' + id + ' no existe',
+                errors: { message: 'No existe viaje con ese ID' }
+            });
+        } else {
+            res.status(201).json({
+                ok: true,
+                viaje: viaje
+            });
+        }
+    });
+
+});
+
+
 
 
 // ==========================================
@@ -185,9 +258,6 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         viaje: body.viaje,
         buque: body.buque,
         naviera: body.naviera,
-        contenedor: body.contenedor,
-        tipo: body.tipo,
-        vacioimportacion: body.vacioimportacion,
         usuario: req.usuario._id
     });
 
