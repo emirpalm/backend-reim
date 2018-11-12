@@ -80,17 +80,17 @@ function obtenerMenu(ROLE) {
             icono: 'mdi mdi-gauge',
             submenu: [
                 { titulo: 'Dashboard', url: '/dashboard' },
+                { titulo: 'Viajes', url: '/viajes' },
                 { titulo: 'Maniobras', url: '/maniobras' }
             ]
         },
         {
-            titulo: 'Mantenimientos',
+            titulo: 'Catálogos',
             icono: 'mdi mdi-folder-lock-open',
             submenu: [
                 { titulo: 'Operadores', url: '/operadores' },
                 { titulo: 'Camiones', url: '/camiones' },
                 { titulo: 'Contenedores', url: '/contenedores' },
-                { titulo: 'Viajes', url: '/viajes' },
                 { titulo: 'Clientes', url: '/clientes' },
                 { titulo: 'Agencias', url: '/agencias' },
                 { titulo: 'Fleteras', url: '/fleteras' }

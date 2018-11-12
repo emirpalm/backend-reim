@@ -20,7 +20,7 @@ app.put('/:tipo/:id', (req, res, next) => {
     var id = req.params.id;
 
     // tipos de colección
-    var tiposValidos = ['usuarios', 'operadores', 'maniobras'];
+    var tiposValidos = ['usuarios', 'operadores', 'fotos_lavado', 'fotos_reparacion'];
     if (tiposValidos.indexOf(tipo) < 0) {
         return res.status(400).json({
             ok: false,
@@ -131,9 +131,43 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
     }
 
-    if (tipo === 'maniobras') {
+    if (tipo === 'operadores') {
+
+        Operador.findById(id, (err, operador) => {
+
+            if (!operador) {
+                return res.status(400).json({
+                    ok: true,
+                    mensaje: 'Operador no existe',
+                    errors: { message: 'Operador no existe' }
+                });
+            }
+
+            var pathViejo = './uploads/operadores/' + operador.img;
+
+            // Si existe, elimina la imagen anterior
+            if (fs.existsSync(pathViejo)) {
+                fs.unlinkSync(pathViejo);
+            }
+
+            operador.img = nombreArchivo;
+
+            operador.save((err, operadorActualizado) => {
+
+                return res.status(200).json({
+                    ok: true,
+                    mensaje: 'Imagen de operador actualizada',
+                    operador: operadorActualizado
+                });
+
+            })
+
+        });
+    }
+
+    if (tipo === 'fotos_lavado') {
         var img = { "img": nombreArchivo };
-        Maniobra.findByIdAndUpdate(id, { $push: { imgs: img } }, (err, maniobra) => {
+        Maniobra.findByIdAndUpdate(id, { $push: { imgl: img } }, (err, maniobra) => {
             {
 
                 if (!maniobra) {
@@ -154,38 +188,27 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
     }
 
-    if (tipo === 'operadores') {
+    if (tipo === 'fotos_reparacion') {
+        var img = { "img": nombreArchivo };
+        Maniobra.findByIdAndUpdate(id, { $push: { imgr: img } }, (err, maniobra) => {
+            {
 
-        Operador.findById(id, (err, operador) => {
+                if (!maniobra) {
+                    return res.status(400).json({
+                        ok: true,
+                        mensaje: 'Maniobra no existe',
+                        errors: { message: 'Maniobra no existe' }
+                    });
+                }
 
-            if (!operador) {
-                return res.status(400).json({
+                res.status(201).json({
                     ok: true,
-                    mensaje: 'Operador no existe',
-                    errors: { message: 'Operador no existe' }
+                    maniobra: maniobra
                 });
             }
-
-            var pathViejo = './uploads/operadores/' + operador.img;
-
-            // Si existe, elimina la imagen anterior
-            if (fs.existsSync(pathViejo)) {
-                fs.unlink(pathViejo);
-            }
-
-            operador.img = nombreArchivo;
-
-            operador.save((err, operadorActualizado) => {
-
-                return res.status(200).json({
-                    ok: true,
-                    mensaje: 'Imagen de operador actualizada',
-                    operador: operadorActualizado
-                });
-
-            })
 
         });
+
     }
 
 

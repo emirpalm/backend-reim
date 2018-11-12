@@ -50,7 +50,10 @@ var maniobraSchema = new Schema({
         ref: 'Viaje',
         required: [true, 'El id Viaje es un campo obligatorio ']
     },
-    imgs: [{
+    imgl: [{
+        img: { type: String }
+    }],
+    imgr: [{
         img: { type: String }
     }],
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
