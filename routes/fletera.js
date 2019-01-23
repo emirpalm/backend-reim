@@ -13,8 +13,9 @@ app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
+    var role = 'TRANSPORTISTA_ROLE';
 
-    Fletera.find({})
+    Fletera.find({ role: role })
         .skip(desde)
         .limit(5)
         .populate('usuario', 'nombre email')
@@ -29,7 +30,7 @@ app.get('/', (req, res, next) => {
                     });
                 }
 
-                Fletera.countDocuments({}, (err, conteo) => {
+                Fletera.countDocuments({ role: role }, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
@@ -42,7 +43,7 @@ app.get('/', (req, res, next) => {
 });
 
 // ==========================================
-//  Obtener Fleteras por ID
+// Obtener Fleteras por ID
 // ==========================================
 app.get('/:id', (req, res) => {
 
@@ -104,9 +105,22 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
             });
         }
 
-
-        fletera.nombre = body.nombre;
+        fletera.cliente = body.cliente;
+        fletera.razonSocial = body.razonSocial;
         fletera.rfc = body.rfc;
+        fletera.calle = body.calle;
+        fletera.numeroExterior = body.numeroExterior;
+        fletera.numeroInterior = body.numeroInterior;
+        fletera.colonia = body.colonia;
+        fletera.municipioDelegacion = body.municipioDelegacion;
+        fletera.ciudad = body.ciudad;
+        fletera.estado = body.estado;
+        fletera.cp = body.cp;
+        fletera.correo = body.correo;
+        fletera.correoFac = body.correoFac;
+        fletera.credito = body.credito;
+        fletera.patente = body.patente;
+        fletera.nombreComercial = body.nombreComercial;
         fletera.usuario = req.usuario._id;
 
         fletera.save((err, fleteraGuardado) => {
@@ -140,8 +154,22 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var body = req.body;
 
     var fletera = new Fletera({
-        nombre: body.nombre,
+        cliente: body.cliente,
+        razonSocial: body.razonSocial,
         rfc: body.rfc,
+        calle: body.calle,
+        numeroExterior: body.numeroExterior,
+        numeroInterior: body.numeroInterior,
+        colonia: body.colonia,
+        municipioDelegacion: body.municipioDelegacion,
+        ciudad: body.ciudad,
+        estado: body.estado,
+        cp: body.cp,
+        correo: body.correo,
+        correoFac: body.correoFac,
+        credito: body.credito,
+        patente: body.patente,
+        nombreComercial: body.nombreComercial,
         usuario: req.usuario._id
     });
 

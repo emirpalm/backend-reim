@@ -68,7 +68,7 @@ app.post('/', (req, res) => {
             menu: obtenerMenu(usuarioDB.role)
         });
 
-    })
+    }).populate('empresas', 'razonSocial')
 
 
 });
@@ -80,20 +80,21 @@ function obtenerMenu(ROLE) {
             icono: 'mdi mdi-gauge',
             submenu: [
                 { titulo: 'Dashboard', url: '/dashboard' },
-                { titulo: 'Viajes', url: '/viajes' },
-                { titulo: 'Maniobras', url: '/maniobras' }
+                { titulo: 'Mis Clientes', url: '/misclientes' },
             ]
         },
         {
             titulo: 'Catálogos',
             icono: 'mdi mdi-folder-lock-open',
             submenu: [
-                { titulo: 'Operadores', url: '/operadores' },
-                { titulo: 'Camiones', url: '/camiones' },
-                { titulo: 'Contenedores', url: '/contenedores' },
-                { titulo: 'Clientes', url: '/clientes' },
-                { titulo: 'Agencias', url: '/agencias' },
-                { titulo: 'Fleteras', url: '/fleteras' }
+
+            ]
+        },
+        {
+            titulo: 'Naviera',
+            icono: 'mdi mdi-folder-lock-open',
+            submenu: [
+
             ]
         }
     ];
@@ -101,8 +102,29 @@ function obtenerMenu(ROLE) {
     console.log('ROLE', ROLE);
 
     if (ROLE === 'ADMIN_ROLE') {
+        menu[0].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
+        menu[0].submenu.unshift({ titulo: 'Maniobras', url: '/maniobras' });
+
         menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
         menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
+        menu[1].submenu.unshift({ titulo: 'Operadores', url: '/operadores' });
+        menu[1].submenu.unshift({ titulo: 'Camiones', url: '/camiones' });
+        menu[1].submenu.unshift({ titulo: 'Contenedores', url: '/contenedores' });
+        menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
+        menu[1].submenu.unshift({ titulo: 'Agencias', url: '/agencias' });
+        menu[1].submenu.unshift({ titulo: 'Transportistas', url: '/fleteras' });
+        menu[1].submenu.unshift({ titulo: 'Navieras', url: '/navieras' });
+
+        menu[2].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
+        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+    }
+    if (ROLE === 'AA_ROLE') {
+        menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
+        menu[2].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
+        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+    }
+    if (ROLE === 'NAVIERA_ROLE') {
+        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
     }
 
 

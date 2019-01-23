@@ -13,8 +13,9 @@ app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
+    var role = 'NAVIERA_ROLE';
 
-    Naviera.find({})
+    Naviera.find({ role: role })
         .skip(desde)
         .limit(5)
         .populate('usuario', 'nombre email')
@@ -29,7 +30,7 @@ app.get('/', (req, res, next) => {
                     });
                 }
 
-                Naviera.countDocuments({}, (err, conteo) => {
+                Naviera.countDocuments({ role: role }, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,
@@ -104,9 +105,24 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
             });
         }
 
-
-        naviera.naviera = body.naviera;
+        naviera.cliente = body.cliente;
+        naviera.razonSocial = body.razonSocial;
+        naviera.rfc = body.rfc;
+        naviera.calle = body.calle;
+        naviera.numeroExterior = body.numeroExterior;
+        naviera.numeroInterior = body.numeroInterior;
+        naviera.colonia = body.colonia;
+        naviera.municipioDelegacion = body.municipioDelegacion;
+        naviera.ciudad = body.ciudad;
+        naviera.estado = body.estado;
+        naviera.cp = body.cp;
+        naviera.correo = body.correo;
+        naviera.correoFac = body.correoFac;
+        naviera.credito = body.credito;
+        naviera.patente = body.patente;
+        naviera.nombreComercial = body.nombreComercial;
         naviera.usuario = req.usuario._id;
+
 
         naviera.save((err, navieraGuardado) => {
 
@@ -139,7 +155,22 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var body = req.body;
 
     var naviera = new Naviera({
-        naviera: body.naviera,
+        cliente: body.cliente,
+        razonSocial: body.razonSocial,
+        rfc: body.rfc,
+        calle: body.calle,
+        numeroExterior: body.numeroExterior,
+        numeroInterior: body.numeroInterior,
+        colonia: body.colonia,
+        municipioDelegacion: body.municipioDelegacion,
+        ciudad: body.ciudad,
+        estado: body.estado,
+        cp: body.cp,
+        correo: body.correo,
+        correoFac: body.correoFac,
+        credito: body.credito,
+        patente: body.patente,
+        nombreComercial: body.nombreComercial,
         usuario: req.usuario._id
     });
 

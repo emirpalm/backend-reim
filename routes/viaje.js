@@ -116,8 +116,6 @@ app.get('/numero/:viaje', (req, res) => {
 
 
 
-
-
 // ==========================================
 // Actualizar Viaje
 // ==========================================
@@ -283,7 +281,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 
 
 // ============================================
-//   Borrar viaje por el id
+// Borrar viaje por el id
 // ============================================
 app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
 

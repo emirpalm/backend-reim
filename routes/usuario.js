@@ -16,8 +16,9 @@ app.get('/', (req, res, netx) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Usuario.find({}, 'nombre email img role')
+    Usuario.find({}, 'nombre email img role empresas')
         .skip(desde)
+        .populate('empresas', 'razonSocial')
         .limit(5)
         .exec(
             (err, usuarios) => {
@@ -39,6 +40,37 @@ app.get('/', (req, res, netx) => {
             })
 });
 
+// ==========================================
+//  Obtener usuario por ID
+// ==========================================
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Usuario.findById(id, 'empresas')
+        .populate('empresas', 'razonSocial')
+        .exec((err, usuario) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar usuario',
+                    errors: err
+                });
+            }
+
+            if (!usuario) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'La usuario con el id ' + id + 'no existe',
+                    errors: { message: 'No existe una usuario con ese ID' }
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                usuario: usuario
+            });
+        })
+})
 
 
 
@@ -70,6 +102,7 @@ app.put('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_o_
         usuario.nombre = body.nombre;
         usuario.email = body.email;
         usuario.role = body.role;
+        usuario.empresas = body.empresas;
 
         usuario.save((err, usuarioGuardado) => {
 
@@ -107,8 +140,8 @@ app.post('/', (req, res) => {
         nombre: body.nombre,
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
-        img: body.img,
-        role: body.role
+        role: body.role,
+        empresas: body.empresas
     });
 
     usuario.save((err, usuarioGuardado) => {
