@@ -82,7 +82,7 @@ app.put('/:tipo/:id', (req, res, next) => {
         // });
 
 
-    })
+    });
 
 
 
@@ -124,7 +124,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
                     usuario: usuarioActualizado
                 });
 
-            })
+            });
 
 
         });
@@ -160,7 +160,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
                     operador: operadorActualizado
                 });
 
-            })
+            });
 
         });
     }

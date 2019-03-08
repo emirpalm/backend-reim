@@ -44,34 +44,35 @@ var buesquedaRoutes = require('./routes/busqueda');
 var forgotpass = require('./routes/forgotpass');
 var resetpass = require('./routes/resetpass');
 var UploadFile = require('./routes/uploadfile');
+var prealta = require('./routes/prealtamaniobra');
 
 
 // Conexión a la base de datos Mongoose
-mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { useNewUrlParser: true }, (err, res) => {
+mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { useCreateIndex: true, useNewUrlParser: true }, (err, res) => {
     if (err) throw err;
     console.log('Base de datos Mongoose: \x1b[32m%s\x1b[0m', 'online');
 })
 
 
 // Rutas
-
-app.use('/uploadFile', UploadFile)
-app.use('/reset_password', resetpass)
-app.use('/forgot_password', forgotpass)
-app.use('/busqueda', buesquedaRoutes)
-app.use('/naviera', navieraRoutes)
-app.use('/buque', buqueRoutes)
-app.use('/viaje', viajesRoutes)
-app.use('/fletera', fleteraRoutes)
-app.use('/agencia', agenciaRoutes)
-app.use('/cliente', clienteRoutes)
-app.use('/contenedor', contenedorRoutes)
-app.use('/camion', camionRoutes)
-app.use('/operador', operadorRoutes)
-app.use('/maniobra', maniobraRoutes)
-app.use('/img', imagenesRoutes)
-app.use('/dropzone', dropzoneRoutes)
-app.use('/upload', uploadRoutes)
+app.use('/prealta', prealta);
+app.use('/uploadFile', UploadFile);
+app.use('/reset_password', resetpass);
+app.use('/forgot_password', forgotpass);
+app.use('/busqueda', buesquedaRoutes);
+app.use('/naviera', navieraRoutes);
+app.use('/buque', buqueRoutes);
+app.use('/viaje', viajesRoutes);
+app.use('/fletera', fleteraRoutes);
+app.use('/agencia', agenciaRoutes);
+app.use('/cliente', clienteRoutes);
+app.use('/contenedor', contenedorRoutes);
+app.use('/camion', camionRoutes);
+app.use('/operador', operadorRoutes);
+app.use('/maniobra', maniobraRoutes);
+app.use('/img', imagenesRoutes);
+app.use('/dropzone', dropzoneRoutes);
+app.use('/upload', uploadRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/login', loginRoutes);
 app.use('/', appRoutes);

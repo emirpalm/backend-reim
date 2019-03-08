@@ -37,7 +37,7 @@ app.get('/', (req, res, next) => {
                         naviera: naviera,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -71,8 +71,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 naviera: naviera
             });
-        })
-})
+        });
+});
 
 
 
@@ -105,7 +105,6 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
             });
         }
 
-        naviera.cliente = body.cliente;
         naviera.razonSocial = body.razonSocial;
         naviera.rfc = body.rfc;
         naviera.calle = body.calle;
@@ -155,7 +154,6 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var body = req.body;
 
     var naviera = new Naviera({
-        cliente: body.cliente,
         razonSocial: body.razonSocial,
         rfc: body.rfc,
         calle: body.calle,

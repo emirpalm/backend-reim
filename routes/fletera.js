@@ -37,7 +37,7 @@ app.get('/', (req, res, next) => {
                         fletera: fletera,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -71,8 +71,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 fletera: fletera
             });
-        })
-})
+        });
+});
 
 
 

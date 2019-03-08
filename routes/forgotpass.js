@@ -54,7 +54,7 @@ app.post('/', (req, res) => {
                         return res.status(500).json({
                             ok: false,
                             mensaje: 'No se encontro usuario con ese correo',
-                            errores: err
+                            errors: err
                         });
                     }
                 });

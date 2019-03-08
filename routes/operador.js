@@ -36,7 +36,7 @@ app.get('/', (req, res, next) => {
                         operadores: operadores,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -70,8 +70,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 operadores: operadores
             });
-        })
-})
+        });
+});
 
 
 

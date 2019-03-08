@@ -72,7 +72,7 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
             [tabla]: data
         });
 
-    })
+    });
 
 });
 
@@ -110,7 +110,7 @@ app.get('/todo/:busqueda', (req, res, next) => {
                 maniobras: respuestas[6],
                 usuarios: respuestas[7]
             });
-        })
+        });
 
 
 });
@@ -127,7 +127,7 @@ function buscarOperadores(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar operadores', err);
                 } else {
-                    resolve(operador)
+                    resolve(operador);
                 }
             });
     });
@@ -144,7 +144,7 @@ function buscarCamiones(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar camiones', err);
                 } else {
-                    resolve(camiones)
+                    resolve(camiones);
                 }
             });
     });
@@ -161,7 +161,7 @@ function buscarContenedores(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar contenedores', err);
                 } else {
-                    resolve(contenedor)
+                    resolve(contenedor);
                 }
             });
     });
@@ -178,7 +178,7 @@ function buscarClientes(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar clientes', err);
                 } else {
-                    resolve(clientes)
+                    resolve(clientes);
                 }
             });
     });
@@ -195,7 +195,7 @@ function buscarAgencias(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar agencias', err);
                 } else {
-                    resolve(agencias)
+                    resolve(agencias);
                 }
             });
     });
@@ -212,7 +212,7 @@ function buscarFleteras(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar fleteras', err);
                 } else {
-                    resolve(fleteras)
+                    resolve(fleteras);
                 }
             });
     });
@@ -233,7 +233,7 @@ function buscarManiobras(busqueda, regex) {
                 if (err) {
                     reject('Error al cargar maniobras', err);
                 } else {
-                    resolve(maniobra)
+                    resolve(maniobra);
                 }
             });
     });
@@ -254,7 +254,7 @@ function buscarUsuarios(busqueda, regex) {
                 }
 
 
-            })
+            });
 
 
     });

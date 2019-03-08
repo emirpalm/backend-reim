@@ -112,34 +112,40 @@ app.get('/:id', (req, res) => {
 // ==========================================
 
 app.get('/empresa/:id', (req, res) => {
-
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
     var id = req.params.id;
 
     Cliente.find({ empresas: id })
         .populate('usuario', 'nombre email')
-        .exec((err, cliente) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    mensaje: 'Error al buscar el cliente',
-                    errors: err
-                });
-            }
+        .exec(
+            (err, cliente) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al cargar clientes',
+                        errors: err
+                    });
+                }
 
-            if (!cliente) {
-                return res.status(400).json({
-                    ok: false,
-                    mensaje: 'El cliente con el id ' + id + 'no existe',
-                    errors: { message: 'No existe un cliente con ese ID' }
-                });
-            }
-            res.status(200).json({
-                ok: true,
-                cliente: cliente
+                if (!cliente) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'El cliente con el id ' + id + 'no existe',
+                        errors: { message: 'No existe un cliente con ese ID' }
+                    });
+                }
+                Cliente.countDocuments({ empresas: id }, (err, conteo) => {
+
+                    res.status(200).json({
+                        ok: true,
+                        cliente: cliente,
+                        total: conteo
+                    });
+                })
+
             });
-        })
-})
-
+});
 
 // ==========================================
 // Actualizar Cliente

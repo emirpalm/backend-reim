@@ -56,7 +56,8 @@ app.post('/', (req, res, next) => {
                 user.save((err) => {
                     if (err) {
                         return res.status(422).send({
-                            message: err
+                            message: err,
+                            errors: err
                         });
                     } else {
                         var data = {

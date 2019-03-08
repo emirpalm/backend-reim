@@ -27,7 +27,7 @@ var navieraSchema = new Schema({
     nombreComercial: { type: String, requiered: [true, 'EL nombre comercial es necesaria'] },
     role: { type: String, required: true, default: 'NAVIERA_ROLE', enum: rolesValidos },
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' }
-}, { collection: 'empresas' });
+}, { collection: 'clientes' });
 
 navieraSchema.plugin(uniqueValidator, { message: '{PATH} debe ser unico' })
 

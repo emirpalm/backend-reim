@@ -84,7 +84,7 @@ app.put('/:id', (req, res, next) => {
             // });
 
 
-        })
+        });
     }
 });
 
@@ -117,7 +117,7 @@ function subirPorTipo(nombreCarpeta, id, nombreArchivo, res) {
                 maniobra: maniobraActualizado
             });
 
-        })
+        });
 
 
     });

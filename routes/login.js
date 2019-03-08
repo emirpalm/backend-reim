@@ -37,7 +37,7 @@ app.post('/', (req, res) => {
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al buscar usuario',
-                errores: err
+                errors: err
             });
         }
 
@@ -45,7 +45,7 @@ app.post('/', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'Credenciales incorrectas = email',
-                errores: err
+                errors: err
             });
         }
 
@@ -53,12 +53,12 @@ app.post('/', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'Credenciales incorrectas - password',
-                errores: err
+                errors: err
             });
         }
         // Crear token
         usuarioDB.password = '=)';
-        var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 }) // 4hrs
+        var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 }); // 4hrs
 
         res.status(200).json({
             ok: true,
@@ -68,7 +68,7 @@ app.post('/', (req, res) => {
             menu: obtenerMenu(usuarioDB.role)
         });
 
-    }).populate('empresas', 'razonSocial')
+    }).populate('empresas', 'razonSocial');
 
 
 });
@@ -79,8 +79,7 @@ function obtenerMenu(ROLE) {
             titulo: 'Principal',
             icono: 'mdi mdi-gauge',
             submenu: [
-                { titulo: 'Dashboard', url: '/dashboard' },
-                { titulo: 'Mis Clientes', url: '/misclientes' },
+                { titulo: 'Dashboard', url: '/dashboard' }
             ]
         },
         {

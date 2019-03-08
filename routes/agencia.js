@@ -37,7 +37,7 @@ app.get('/', (req, res, next) => {
                         agencia: agencia,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -72,8 +72,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 agencia: agencia
             });
-        })
-})
+        });
+});
 
 
 // ==========================================
@@ -105,8 +105,8 @@ app.get('/usuario/:id', (req, res) => {
                 ok: true,
                 agencia: agencia
             });
-        })
-})
+        });
+});
 
 
 // ==========================================

@@ -36,7 +36,7 @@ app.get('/', (req, res, next) => {
                         buque: buque,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -70,8 +70,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 buque: buque
             });
-        })
-})
+        });
+});
 
 
 

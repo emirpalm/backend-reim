@@ -39,7 +39,7 @@ app.get('/', (req, res, next) => {
                         viaje: viaje,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -76,8 +76,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 viaje: viaje
             });
-        })
-})
+        });
+});
 
 // ==========================================
 //  Obtener viajes por numero
@@ -111,8 +111,8 @@ app.get('/numero/:viaje', (req, res) => {
                 ok: true,
                 viaje: viaje
             });
-        })
-})
+        });
+});
 
 
 

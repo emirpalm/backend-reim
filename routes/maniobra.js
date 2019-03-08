@@ -38,7 +38,8 @@ app.get('/', (req, res, netx) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error cargando maniobras'
+                        mensaje: 'Error cargando maniobras',
+                        errors: err
                     });
                 }
                 Maniobra.countDocuments({}, (err, conteo) => {
@@ -48,9 +49,9 @@ app.get('/', (req, res, netx) => {
                         total: conteo
                     });
 
-                })
+                });
 
-            })
+            });
 });
 
 // =======================================
@@ -93,7 +94,8 @@ app.get('/hoy', (req, res, netx) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error cargando maniobras'
+                        mensaje: 'Error cargando maniobras',
+                        errors: err
                     });
                 }
                 Maniobra.countDocuments({}, (err, conteo) => {
@@ -103,9 +105,9 @@ app.get('/hoy', (req, res, netx) => {
                         total: conteo
                     });
 
-                })
+                });
 
-            })
+            });
 });
 
 
@@ -144,7 +146,8 @@ app.get('/rangofecha', (req, res, netx) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error cargando maniobras'
+                        mensaje: 'Error cargando maniobras',
+                        errors: err
                     });
                 }
                 Maniobra.countDocuments({}, (err, conteo) => {
@@ -154,9 +157,9 @@ app.get('/rangofecha', (req, res, netx) => {
                         total: conteo
                     });
 
-                })
+                });
 
-            })
+            });
 });
 
 
@@ -203,8 +206,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 maniobras: maniobras
             });
-        })
-})
+        });
+});
 
 // =======================================
 // Crear Maniobra
@@ -239,7 +242,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'Error al crear maniobra',
-                errores: err
+                errors: err
             });
         }
         res.status(201).json({
@@ -264,7 +267,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al buscar maniobra',
-                errores: err
+                errors: err
             });
         }
 
@@ -272,7 +275,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'La maniobra con el id ' + id + ' no existe',
-                errores: { message: 'No existe una maniobra con ese ID' }
+                errors: { message: 'No existe una maniobra con ese ID' }
             });
         }
 
@@ -300,7 +303,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
                 return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al actualizar la maniobra',
-                    errores: err
+                    errors: err
                 });
             }
 
@@ -328,7 +331,7 @@ app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al borrar maniobra',
-                errores: err
+                errors: err
             });
         }
 
@@ -336,7 +339,7 @@ app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'No existe una maniobra con ese id',
-                errores: { message: 'No existe una maniobra con ese id' }
+                errors: { message: 'No existe una maniobra con ese id' }
             });
         }
 

@@ -87,13 +87,13 @@ app.put('/', mdAutenticacion.verificaToken, (req, res) => {
                         }
                     });
 
-                })
+                });
 
             }
         });
 
 
-    })
+    });
 
 
 

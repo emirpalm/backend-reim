@@ -25,7 +25,8 @@ app.get('/', (req, res, netx) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mensaje: 'Error cargando usuario'
+                        mensaje: 'Error cargando usuario',
+                        errors: err
                     });
                 }
                 Usuario.countDocuments({}, (err, conteo) => {
@@ -35,9 +36,9 @@ app.get('/', (req, res, netx) => {
                         total: conteo
                     });
 
-                })
+                });
 
-            })
+            });
 });
 
 // ==========================================
@@ -62,15 +63,15 @@ app.get('/:id', (req, res) => {
                 return res.status(400).json({
                     ok: false,
                     mensaje: 'La usuario con el id ' + id + 'no existe',
-                    errors: { message: 'No existe una usuario con ese ID' }
+                    errors: { message: 'No existe un usuario con ese ID' }
                 });
             }
             res.status(200).json({
                 ok: true,
                 usuario: usuario
             });
-        })
-})
+        });
+});
 
 
 
@@ -87,7 +88,7 @@ app.put('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_o_
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al buscar usuario',
-                errores: err
+                errors: err
             });
         }
 
@@ -95,7 +96,7 @@ app.put('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_o_
             return res.status(400).json({
                 ok: false,
                 mensaje: 'El usuario con el id ' + id + ' no existe',
-                errores: { message: 'No existe un usuario con ese ID' }
+                errors: { message: 'No existe un usuario con ese ID' }
             });
         }
 
@@ -110,7 +111,7 @@ app.put('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_o_
                 return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al actualizar usuario',
-                    errores: err
+                    errors: err
                 });
             }
 
@@ -150,7 +151,7 @@ app.post('/', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'Error al crear usuario',
-                errores: err
+                errors: err
             });
         }
         usuarioGuardado.password = '=)';
@@ -176,7 +177,7 @@ app.delete('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al borrar usuario',
-                errores: err
+                errors: err
             });
         }
 
@@ -184,7 +185,7 @@ app.delete('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN
             return res.status(400).json({
                 ok: false,
                 mensaje: 'No existe un usuario con ese id',
-                errores: { message: 'No existe un usuario con ese id' }
+                errors: { message: 'No existe un usuario con ese id' }
             });
         }
 

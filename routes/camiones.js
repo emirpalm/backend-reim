@@ -37,7 +37,7 @@ app.get('/', (req, res, next) => {
                         camiones: camiones,
                         total: conteo
                     });
-                })
+                });
 
             });
 });
@@ -72,8 +72,8 @@ app.get('/:id', (req, res) => {
                 ok: true,
                 camiones: camiones
             });
-        })
-})
+        });
+});
 
 
 
