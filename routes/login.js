@@ -101,6 +101,7 @@ function obtenerMenu(ROLE) {
     console.log('ROLE', ROLE);
 
     if (ROLE === 'ADMIN_ROLE') {
+        menu[0].submenu.unshift({ titulo: 'Aprobación de descargas', url: '/aprobacion' });
         menu[0].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
         menu[0].submenu.unshift({ titulo: 'Maniobras', url: '/maniobras' });
 

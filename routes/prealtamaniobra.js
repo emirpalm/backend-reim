@@ -3,24 +3,24 @@ var express = require('express');
 
 var mdAutentication = require('../middlewares/autenticacion');
 
-// inicializar variables
+// Inicializar variables
 var app = express();
 
 var Prealta = require('../models/prealtamaniobra');
 
 // =======================================
-// Obtener Usuarios
+// Obtener todas las prealtas
 // =======================================
 app.get('/', (req, res, next) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Prealta.find({}, 'folio agencia naviera contenedor tipoContenedor transportista facturarA comprobantePago credito reparacion lavado observaciones fechaAprobacion')
+    Prealta.find({}, 'folio agencia naviera contenedor tipoContenedor transportista facturarA comprobantePago credito reparacion lavado observaciones folioAprobacion')
         .skip(desde)
         .limit(5)
         .exec(
-            (err, prealta) => {
+            (err, prealtas) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
@@ -32,7 +32,7 @@ app.get('/', (req, res, next) => {
                 Prealta.countDocuments((err, conteo) => {
                     res.status(200).json({
                         ok: true,
-                        prealta: prealta,
+                        prealtas,
                         total: conteo
                     });
                 });
@@ -40,7 +40,7 @@ app.get('/', (req, res, next) => {
 });
 
 // ==========================================
-//  Obtener prealta por ID
+//  Obtener prealta por id
 // ==========================================
 app.get('/:id', (req, res) => {
 
@@ -72,7 +72,7 @@ app.get('/:id', (req, res) => {
 });
 
 // ==========================================
-// Actualizar Agencias
+// Actualizar prealtas
 // ==========================================
 app.put('/:id', mdAutentication.verificaToken, (req, res) => {
     var id = req.params.id;
@@ -96,14 +96,15 @@ app.put('/:id', mdAutentication.verificaToken, (req, res) => {
         prealta.folio = body.folio;
         prealta.agencia = body.agencia;
         prealta.naviera = body.naviera;
-        prealta.contenedor = body.contenedor;
-        prealta.tipoContenedor = body.tipoContenedor;
         prealta.transportista = body.transportista;
         prealta.facturarA = body.facturarA;
-        prealta.comprobantePago = body.comprobantePago;
         prealta.credito = body.credito;
+        prealta.contenedor = body.contenedor;
+        prealta.tipoContenedor = body.tipoContenedor;
+        prealta.estado = body.estado;
         prealta.reparacion = body.reparacion;
         prealta.lavado = body.lavado;
+        prealta.servicio = body.servicio;
         prealta.observaciones = body.observaciones;
 
         prealta.save((err, prealtaGuardado) => {
@@ -125,7 +126,7 @@ app.put('/:id', mdAutentication.verificaToken, (req, res) => {
 });
 
 // ==========================================
-// Crear nuevos clientes
+// Crear nuevos prealtas
 // ==========================================
 app.post('/', mdAutentication.verificaToken, (req, res) => {
     var body = req.body;
@@ -134,15 +135,13 @@ app.post('/', mdAutentication.verificaToken, (req, res) => {
         folio: body.folio,
         agencia: body.agencia,
         naviera: body.naviera,
-        contenedores: body.contenedor,
-        tipoContenedor: body.tipoContenedor,
         transportista: body.transportista,
         facturarA: body.facturarA,
-        comprobantePago: body.comprobantePago,
         credito: body.credito,
-        reparacion: body.reparacion,
-        lavado: body.lavado,
-        observaciones: body.observaciones
+        contenedores: body.contenedores,
+        observaciones: body.observaciones,
+        correo: body.correo,
+        correofac: body.correofac
     });
 
     prealta.save((err, prealtaGuardado) => {
@@ -162,7 +161,7 @@ app.post('/', mdAutentication.verificaToken, (req, res) => {
 });
 
 // ============================================
-//   Borrar agencias por el id
+// Borrar prealta por el id
 // ============================================
 app.delete('/id:', mdAutentication.verificaToken, (req, res) => {
     var id = req.params.id;
