@@ -126,6 +126,48 @@ app.put('/:id', mdAutentication.verificaToken, (req, res) => {
 });
 
 // ==========================================
+// Actualizar estado de aprobacion prealta
+// ==========================================
+app.put('aprobacion/:id', mdAutentication.verificaToken, (req, res) => {
+    var id = req.params.id;
+    var body = req.body;
+
+    Prealta.findById(id, (err, prealta) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar datos',
+                errors: err
+            });
+        }
+        if (!prealta) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'La prealta con el id' + id + ' no existe',
+                errors: { message: 'No existe prealta con ese ID' }
+            });
+        }
+        prealta.folioAprobacion = body.folioAprobacion;
+
+        prealta.save((err, prealtaGuardado) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al actulizar prealta',
+                    errors: err
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                prealta: prealtaGuardado
+            });
+        });
+
+
+    });
+});
+
+// ==========================================
 // Crear nuevos prealtas
 // ==========================================
 app.post('/', mdAutentication.verificaToken, (req, res) => {
