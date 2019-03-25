@@ -128,7 +128,7 @@ app.put('/:id', mdAutentication.verificaToken, (req, res) => {
 // ==========================================
 // Actualizar estado de aprobacion prealta
 // ==========================================
-app.put('aprobacion/:id', mdAutentication.verificaToken, (req, res) => {
+app.put('/aprobacion/:id', mdAutentication.verificaToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
