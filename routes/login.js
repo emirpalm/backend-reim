@@ -98,6 +98,22 @@ function obtenerMenu(ROLE) {
         }
     ];
 
+    var menuNaviera = [{
+            titulo: 'Principal',
+            icono: 'mdi mdi-gauge',
+            submenu: [
+                { titulo: 'Dashboard', url: '/dashboard' }
+            ]
+        },
+        {
+            titulo: 'Naviera',
+            icono: 'mdi mdi-folder-lock-open',
+            submenu: [
+
+            ]
+        }
+    ];
+
     console.log('ROLE', ROLE);
 
     if (ROLE === 'ADMIN_ROLE') {
@@ -121,6 +137,8 @@ function obtenerMenu(ROLE) {
         menu[2].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
         menu[2].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
 
+        return menu;
+
     }
     if (ROLE === 'AA_ROLE') {
         menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
@@ -131,10 +149,9 @@ function obtenerMenu(ROLE) {
         menu[2].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
         menu[2].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
         menu[2].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
+
+        return menuNaviera;
     }
-
-
-    return menu;
 
 }
 
