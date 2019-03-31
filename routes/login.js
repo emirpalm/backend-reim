@@ -117,6 +117,10 @@ function obtenerMenu(ROLE) {
 
         menu[2].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
         menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+        menu[2].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
+        menu[2].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
+        menu[2].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
+
     }
     if (ROLE === 'AA_ROLE') {
         menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
@@ -124,7 +128,9 @@ function obtenerMenu(ROLE) {
         menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
     }
     if (ROLE === 'NAVIERA_ROLE') {
-        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+        menu[2].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
+        menu[2].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
+        menu[2].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
     }
 
 

@@ -18,8 +18,8 @@ app.get('/', (req, res, next) => {
         .skip(desde)
         .limit(5)
         .populate('buque', 'buque')
-        .populate('naviera', 'naviera')
-        .populate('contenedores.contenedor')
+        .populate('contenedores.cliente', 'razonSocial')
+        // .populate('contenedores.contenedor')
         .populate('usuario', 'nombre email')
         .exec(
             (err, viaje) => {
@@ -53,8 +53,9 @@ app.get('/:id', (req, res) => {
 
     Viaje.findById(id)
         .populate('buque', 'buque')
-        .populate('naviera', 'naviera')
-        .populate('contenedores.contenedor')
+        .populate('contenedores.cliente', 'razonSocial')
+        // .populate('naviera', 'naviera')
+        // .populate('contenedores.contenedor')
         .populate('usuario', 'nombre email')
         .exec((err, viaje) => {
             if (err) {

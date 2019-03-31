@@ -1,5 +1,6 @@
 // Requires
 var express = require('express');
+const uuidv4 = require("uuid/v4");
 
 var mdAutentication = require('../middlewares/autenticacion');
 
@@ -74,6 +75,7 @@ app.get('/:id', (req, res) => {
 // ==========================================
 // Actualizar prealtas
 // ==========================================
+let folio = uuidv4();
 app.put('/:id', mdAutentication.verificaToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
@@ -93,7 +95,7 @@ app.put('/:id', mdAutentication.verificaToken, (req, res) => {
                 errors: { message: 'No existe prealta con ese ID' }
             });
         }
-        prealta.folio = body.folio;
+        prealta.folio = folio;
         prealta.agencia = body.agencia;
         prealta.naviera = body.naviera;
         prealta.transportista = body.transportista;
@@ -172,9 +174,10 @@ app.put('/aprobacion/:id', mdAutentication.verificaToken, (req, res) => {
 // ==========================================
 app.post('/', mdAutentication.verificaToken, (req, res) => {
     var body = req.body;
+    let folio = uuidv4();
 
     var prealta = new Prealta({
-        folio: body.folio,
+        folio: folio,
         agencia: body.agencia,
         naviera: body.naviera,
         transportista: body.transportista,

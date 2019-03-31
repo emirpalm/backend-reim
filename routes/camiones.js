@@ -17,7 +17,6 @@ app.get('/', (req, res, next) => {
     Camion.find({})
         .skip(desde)
         .limit(5)
-        .populate('fletera', 'nombre')
         .populate('usuario', 'nombre email')
         .exec(
             (err, camiones) => {
@@ -50,8 +49,7 @@ app.get('/:id', (req, res) => {
     var id = req.params.id;
 
     Camion.findById(id)
-        .populate('fletera', 'nombre')
-        .populate('usuario', 'nombre img email')
+        .populate('usuario', 'nombre email')
         .exec((err, camiones) => {
             if (err) {
                 return res.status(500).json({
@@ -109,7 +107,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
         camiones.placa = body.placa;
         camiones.numbereconomico = body.numbereconomico;
-        camiones.fletera = body.fletera;
+        camiones.vigenciaSeguro = body.vigenciaSeguro;
         camiones.usuario = req.usuario._id;
 
         camiones.save((err, camionGuardado) => {
@@ -145,7 +143,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var camion = new Camion({
         placa: body.placa,
         numbereconomico: body.numbereconomico,
-        fletera: body.fletera,
+        vigenciaSeguro: body.vigenciaSeguro,
         usuario: req.usuario._id
     });
 
