@@ -75,90 +75,50 @@ app.post('/', (req, res) => {
 
 function obtenerMenu(ROLE) {
 
-    var menuAdministrador = [{
-            titulo: 'Principal',
-            icono: 'mdi mdi-gauge',
-            submenu: [
-                { titulo: 'Dashboard', url: '/dashboard' }
-            ]
-        },
-        {
-            titulo: 'Catálogos',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        },
-        {
-            titulo: 'Agencia',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        },
-        {
-            titulo: 'Naviera',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        },
-        {
-            titulo: 'Transportista',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        },
-    ];
-
-    var menuAgencia = [{
-            titulo: 'Principal',
-            icono: 'mdi mdi-gauge',
-            submenu: [
-                { titulo: 'Dashboard', url: '/dashboard' }
-            ]
-        },
-        {
-            titulo: 'Catálogos',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        },
-        {
-            titulo: 'Agencia',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        }
-    ];
-
-    var menuNaviera = [{
-            titulo: 'Principal',
-            icono: 'mdi mdi-gauge',
-            submenu: [
-                { titulo: 'Dashboard', url: '/dashboard' }
-            ]
-        },
-        {
-            titulo: 'Naviera',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-
-            ]
-        }
-    ];
-
     console.log('ROLE', ROLE);
 
     if (ROLE === 'ADMIN_ROLE') {
+        let menu = [{
+                titulo: 'Principal',
+                icono: 'mdi mdi-gauge',
+                submenu: [
+                    { titulo: 'Dashboard', url: '/dashboard' }
+                ]
+            },
+            {
+                titulo: 'Catálogos',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
+
+                ]
+            },
+            {
+                titulo: 'Agencia',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
+
+                ]
+            },
+            {
+                titulo: 'Naviera',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
+
+                ]
+            },
+            {
+                titulo: 'Transportista',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
+
+                ]
+            },
+        ];
         menu[0].submenu.unshift({ titulo: 'Aprobación de descargas', url: '/aprobacion' });
         menu[0].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
         menu[0].submenu.unshift({ titulo: 'Maniobras', url: '/maniobras' });
 
-        menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
+
         menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
         menu[1].submenu.unshift({ titulo: 'Operadores', url: '/operadores' });
         menu[1].submenu.unshift({ titulo: 'Camiones', url: '/camiones' });
@@ -167,6 +127,7 @@ function obtenerMenu(ROLE) {
         menu[1].submenu.unshift({ titulo: 'Agencias', url: '/agencias' });
         menu[1].submenu.unshift({ titulo: 'Transportistas', url: '/fleteras' });
         menu[1].submenu.unshift({ titulo: 'Navieras', url: '/navieras' });
+        menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
 
 
         menu[2].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
@@ -175,23 +136,75 @@ function obtenerMenu(ROLE) {
         menu[2].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
         menu[2].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
 
-        return menuAdministrador;
+        return menu;
 
     }
     if (ROLE === 'AA_ROLE') {
-        menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
-        menu[2].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
-        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+        let menu = [{
+                titulo: 'Principal',
+                icono: 'mdi mdi-gauge',
+                submenu: [
+                    { titulo: 'Dashboard', url: '/dashboard' }
+                ]
+            },
+            {
+                titulo: 'Agencia',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
 
-        return menuAgencia;
+                ]
+            },
+        ];
+
+        menu[1].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
+        menu[1].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+        menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
+
+        return menu;
     }
     if (ROLE === 'NAVIERA_ROLE') {
-        menu[0].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
-        menu[1].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
-        menu[1].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
-        menu[1].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
+        let menu = [{
+                titulo: 'Principal',
+                icono: 'mdi mdi-gauge',
+                submenu: [
+                    { titulo: 'Dashboard', url: '/dashboard' }
+                ]
+            },
+            {
+                titulo: 'Naviera',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
 
-        return menuNaviera;
+                ]
+            },
+        ];
+        menu[1].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
+        menu[1].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
+        menu[1].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
+        menu[1].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
+
+        return menu;
+    }
+    if (ROLE === 'TRANSPORTISTA_ROLE') {
+        let menu = [{
+                titulo: 'Principal',
+                icono: 'mdi mdi-gauge',
+                submenu: [
+                    { titulo: 'Dashboard', url: '/dashboard' }
+                ]
+            },
+            {
+                titulo: 'Transportista',
+                icono: 'mdi mdi-folder-lock-open',
+                submenu: [
+
+                ]
+            },
+        ];
+        menu[1].submenu.unshift({ titulo: 'Operadores', url: '/operadores' });
+        menu[1].submenu.unshift({ titulo: 'Camiones', url: '/camiones' });
+
+        return menu;
     }
 
 }

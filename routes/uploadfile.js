@@ -67,17 +67,23 @@ app.put('/', mdAutenticacion.verificaToken, (req, res) => {
                     headers: [
                         'viaje',
                         'buque',
+                        'fechaArrivo',
+                        'fechaVigenciaTemporal',
                         'contenedor',
                         'tipo',
-                        'vacioimportacion'
+                        'peso',
+                        'cliente'
                     ]
                 }).on("data", function(data) {
                     var viaje = new Viaje();
                     viaje.viaje = data['viaje'];
                     viaje.buque = data['buque'];
-                    viaje.contenedor = data['contenedor'];
-                    viaje.tipo = data['tipo'];
-                    viaje.vacioimportacion = data['vacioimportacion'];
+                    viaje.fechaArrivo = data['fechaArrivo'];
+                    viaje.fechaTemporal = data['fechaTemporal'];
+                    viaje.contenedores.contenedor = data['contenedor'];
+                    viaje.contenedores.tipo = data['tipo'];
+                    viaje.contenedores.peso = data['peso'];
+                    viaje.contenedores.cliente = data['cliente'];
                     viaje.usuario = req.usuario._id;
 
                     viaje.save(function(err, data) {
