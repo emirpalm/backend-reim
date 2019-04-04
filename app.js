@@ -45,6 +45,7 @@ var forgotpass = require('./routes/forgotpass');
 var resetpass = require('./routes/resetpass');
 var UploadFile = require('./routes/uploadfile');
 var prealta = require('./routes/prealtamaniobra');
+var exceltojson = require('./routes/exceltojson');
 
 
 // Conexión a la base de datos Mongoose
@@ -55,6 +56,7 @@ mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { use
 
 
 // Rutas
+app.use('/exceltojson', exceltojson);
 app.use('/prealta', prealta);
 app.use('/uploadFile', UploadFile);
 app.use('/reset_password', resetpass);

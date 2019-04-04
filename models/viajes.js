@@ -26,8 +26,9 @@ var viajeSchema = new Schema({
         contenedor: { type: String, unique: true, required: [true, 'El contenedor es necesario'] },
         tipo: { type: String },
         peso: { type: String, default: 'Vacio', enum: vacioimportacionValidos },
-        cliente: { type: Schema.Types.ObjectId, ref: 'Cliente', required: true }
+        cliente: { type: String, required: false }
     }],
+    anio: { type: Date, default: Date.now },
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
 }, { collection: 'viajes' });
 
