@@ -118,8 +118,7 @@ function obtenerMenu(ROLE) {
         menu[0].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
         menu[0].submenu.unshift({ titulo: 'Maniobras', url: '/maniobras' });
 
-
-        menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
+        menu[1].submenu.unshift({ titulo: 'Buques', url: '/buques' });
         menu[1].submenu.unshift({ titulo: 'Operadores', url: '/operadores' });
         menu[1].submenu.unshift({ titulo: 'Camiones', url: '/camiones' });
         menu[1].submenu.unshift({ titulo: 'Contenedores', url: '/contenedores' });
@@ -127,6 +126,7 @@ function obtenerMenu(ROLE) {
         menu[1].submenu.unshift({ titulo: 'Agencias', url: '/agencias' });
         menu[1].submenu.unshift({ titulo: 'Transportistas', url: '/fleteras' });
         menu[1].submenu.unshift({ titulo: 'Navieras', url: '/navieras' });
+        menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
         menu[1].submenu.unshift({ titulo: 'Registrar Usuarios', url: '/register' });
 
 
@@ -178,6 +178,7 @@ function obtenerMenu(ROLE) {
                 ]
             },
         ];
+        menu[1].submenu.unshift({ titulo: 'Buques', url: '/buques' });
         menu[1].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
         menu[1].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
         menu[1].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });

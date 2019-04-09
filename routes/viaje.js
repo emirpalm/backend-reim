@@ -1,10 +1,14 @@
 var express = require('express');
 
 var mdAutenticacion = require('../middlewares/autenticacion');
-
+var fileUpload = require('express-fileupload');
+var fs = require('fs');
 var app = express();
 
 var Viaje = require('../models/viajes');
+
+// default options
+app.use(fileUpload());
 
 // ==========================================
 // Obtener todas los viajes
@@ -256,9 +260,18 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var viaje = new Viaje({
         viaje: body.viaje,
         buque: body.buque,
-        naviera: body.naviera,
+        fechaArrivo: body.fechaArrivo,
+        fechaVigenciaTemporal: body.fechaVigenciaTemporal,
+        contenedores: body.contenedores,
+        pdfTemporal: body.pdfTemporal,
         usuario: req.usuario._id
     });
+
+    console.log(viaje);
+    fs.rename(viaje.pdfTemporal, './uploads/viajes/emir.pdf', (err) => {
+        if (err) { console.log(err); }
+    });
+    viaje.pdfTemporal = './uploads/viajes/emir.pdf';
 
     viaje.save((err, viajeGuardado) => {
 

@@ -3,7 +3,7 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const XLSX = require('xlsx');
 const mdAutenticacion = require('../middlewares/autenticacion');
-const fs = require('fs');
+// const fs = require('fs');
 
 // Inicializar variables
 const app = express();
@@ -13,7 +13,7 @@ const app = express();
 // default options
 app.use(fileUpload());
 
-app.put('/', mdAutenticacion.verificaToken, (req, res, data) => {
+app.put('/', (req, res) => {
 
     if (!req.files) {
         return res.status(400).json({
@@ -44,6 +44,7 @@ app.put('/', mdAutenticacion.verificaToken, (req, res, data) => {
         ok: true,
         excel: XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
     });
+    // console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
 
 
 });

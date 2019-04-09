@@ -108,6 +108,7 @@ app.put('/:id', mdAutentication.verificaToken, (req, res) => {
         prealta.lavado = body.lavado;
         prealta.servicio = body.servicio;
         prealta.observaciones = body.observaciones;
+        prealta.usuario = req.usuario._id;
 
         prealta.save((err, prealtaGuardado) => {
             if (err) {
@@ -186,7 +187,8 @@ app.post('/', mdAutentication.verificaToken, (req, res) => {
         contenedores: body.contenedores,
         observaciones: body.observaciones,
         correo: body.correo,
-        correofac: body.correofac
+        correofac: body.correofac,
+        usuario: req.usuario._id
     });
 
     prealta.save((err, prealtaGuardado) => {
