@@ -17,9 +17,10 @@ app.get('/', (req, res, next) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Prealta.find({}, 'folio agencia naviera contenedor tipoContenedor transportista facturarA comprobantePago credito reparacion lavado observaciones folioAprobacion')
+    Prealta.find({}, 'viaje transportista facturarA contenedor tipo estado destinatario')
         .skip(desde)
         .limit(5)
+        .populate('viaje', 'viaje buque fechaArrivo fechaVigenciaTemporal anio')
         .exec(
             (err, prealtas) => {
                 if (err) {
@@ -178,16 +179,14 @@ app.post('/', mdAutentication.verificaToken, (req, res) => {
     let folio = uuidv4();
 
     var prealta = new Prealta({
-        folio: folio,
-        agencia: body.agencia,
-        naviera: body.naviera,
+        viaje: body.viaje,
         transportista: body.transportista,
         facturarA: body.facturarA,
-        credito: body.credito,
-        contenedores: body.contenedores,
-        observaciones: body.observaciones,
-        correo: body.correo,
-        correofac: body.correofac,
+        correoFac: body.correoFac,
+        contenedor: body.contenedor,
+        tipo: body.tipo,
+        estado: body.estado,
+        destinatario: body.destinatario,
         usuario: req.usuario._id
     });
 

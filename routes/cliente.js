@@ -116,7 +116,7 @@ app.get('/empresa/:id', (req, res) => {
     desde = Number(desde);
     var id = req.params.id;
 
-    Cliente.find({ empresas: id })
+    Cliente.find({ 'empresas': id })
         .populate('usuario', 'nombre email')
         .exec(
             (err, cliente) => {
@@ -135,7 +135,7 @@ app.get('/empresa/:id', (req, res) => {
                         errors: { message: 'No existe un cliente con ese ID' }
                     });
                 }
-                Cliente.countDocuments({ empresas: id }, (err, conteo) => {
+                Cliente.countDocuments({ 'empresas': id }, (err, conteo) => {
 
                     res.status(200).json({
                         ok: true,

@@ -6,6 +6,7 @@ var fs = require('fs');
 var app = express();
 
 var Viaje = require('../models/viajes');
+var Prealta = require('../models/prealtamaniobra');
 
 // default options
 app.use(fileUpload());
@@ -91,7 +92,7 @@ app.get('/numero/:viaje', (req, res) => {
 
     var viaje = req.params.viaje;
 
-    Viaje.find({ viaje: viaje })
+    Viaje.find({ 'viaje': viaje })
         .populate('buque', 'buque')
         .populate('naviera', 'naviera')
         .populate('contenedores.contenedor')
@@ -267,11 +268,13 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         usuario: req.usuario._id
     });
 
-    console.log(viaje);
-    fs.rename(viaje.pdfTemporal, './uploads/viajes/emir.pdf', (err) => {
-        if (err) { console.log(err); }
-    });
-    viaje.pdfTemporal = './uploads/viajes/emir.pdf';
+    // console.log(viaje);
+    /* if (fs.exists('./uploads/temp/' + viaje.pdfTemporal)) {
+         fs.rename('./uploads/temp/' + viaje.pdfTemporal, './uploads/viajes/' + viaje.pdfTemporal, (err) => {
+             if (err) { console.log(err); }
+         });
+     }*/
+    //  viaje.pdfTemporal = Viaje.pdfTemporal;
 
     viaje.save((err, viajeGuardado) => {
 
@@ -288,10 +291,59 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
             viaje: viajeGuardado
         });
 
+        viaje.contenedores.forEach(function(element) {
+            var prealta;
+
+            if (element.Estado == 'VACIO') {
+                prealta = new Prealta({
+                    viaje: viaje._id,
+                    transportista: 'REIM',
+                    facturarA: element.Cliente,
+                    correoFac: 'dad',
+                    contenedor: element.Contenedor,
+                    tipo: element.Tipo,
+                    estado: element.Estado,
+                    destinatario: element.Cliente,
+                    estatus: 'EN ESPERA',
+                    usuario: req.usuario._id
+                });
+            } else {
+                prealta = new Prealta({
+                    viaje: viaje._id,
+                    correoFac: 'dad',
+                    contenedor: element.Contenedor,
+                    tipo: element.Tipo,
+                    estado: element.Estado,
+                    destinatario: element.Cliente,
+                    usuario: req.usuario._id
+                });
+
+            }
+            // console.log(element);
+            // console.log(prealta);
+
+            prealta.save((err, prealtaGuardado) => {
+
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'Error al crear prealta',
+                        errors: err
+                    });
+                }
+
+
+            });
+
+
+        });
 
     });
 
+
 });
+
+
 
 
 // ============================================

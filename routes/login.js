@@ -114,7 +114,7 @@ function obtenerMenu(ROLE) {
                 ]
             },
         ];
-        menu[0].submenu.unshift({ titulo: 'Aprobación de descargas', url: '/aprobacion' });
+        menu[0].submenu.unshift({ titulo: 'Solicitudes de descargas', url: '/solicitudes_de_descarga' });
         menu[0].submenu.unshift({ titulo: 'Viajes', url: '/viajes' });
         menu[0].submenu.unshift({ titulo: 'Maniobras', url: '/maniobras' });
 
@@ -131,7 +131,7 @@ function obtenerMenu(ROLE) {
 
 
         menu[2].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
-        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+        menu[2].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/solicitudes_descargas' });
         menu[2].submenu.unshift({ titulo: 'Reporte de contenedores reparación / lavado', url: '/reportesRL' });
         menu[2].submenu.unshift({ titulo: 'Contenedores en reparación / lavado', url: '/contenedoresRL' });
         menu[2].submenu.unshift({ titulo: 'Contenedores Disponibles', url: '/contenedoresDisponibles' });
@@ -157,7 +157,7 @@ function obtenerMenu(ROLE) {
         ];
 
         menu[1].submenu.unshift({ titulo: 'Solicitud de carga', url: '/aacarga' });
-        menu[1].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/aadescarga' });
+        menu[1].submenu.unshift({ titulo: 'Solicitud de descarga', url: '/solicitudes_descargas' });
         menu[1].submenu.unshift({ titulo: 'Clientes', url: '/clientes' });
 
         return menu;

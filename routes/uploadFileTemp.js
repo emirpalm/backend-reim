@@ -26,7 +26,7 @@ app.put('/', (req, res) => {
     var extensionArchivo = nombreCortado[nombreCortado.length - 1];
 
     // Sólo estas extensiones aceptamos
-    var extensionesValidas = ['pdf'];
+    var extensionesValidas = ['pdf', 'png', 'jpg', 'gif', 'jpeg'];
 
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
         return res.status(400).json({

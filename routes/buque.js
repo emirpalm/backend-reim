@@ -17,6 +17,44 @@ app.get('/', (req, res, next) => {
     Buque.find({})
         .skip(desde)
         .limit(5)
+        .populate('naviera', 'naviera')
+        .populate('usuario', 'nombre email')
+        .exec(
+            (err, buques) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al cargar clientes',
+                        errors: err
+                    });
+                }
+
+                Buque.countDocuments({}, (err, conteo) => {
+
+                    res.status(200).json({
+                        ok: true,
+                        buques,
+                        total: conteo
+                    });
+                });
+
+            });
+});
+
+// ==========================================
+// Obtener todos los buques por naviera
+// ==========================================
+app.get('/naviera/:id', (req, res, next) => {
+
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+    var id = req.params.id;
+
+    Buque.find({ naviera: id })
+        .skip(desde)
+        .limit(5)
+        .populate('naviera', 'naviera')
         .populate('usuario', 'nombre email')
         .exec(
             (err, buques) => {
@@ -49,6 +87,7 @@ app.get('/:id', (req, res) => {
     var id = req.params.id;
 
     Buque.findById(id)
+        .populate('naviera', 'naviera')
         .populate('usuario', 'nombre img email')
         .exec((err, buque) => {
             if (err) {
