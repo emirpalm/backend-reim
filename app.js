@@ -51,10 +51,42 @@ var solicitudD = require('./routes/solicitudD');
 
 
 // Conexión a la base de datos Mongoose
-mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { useCreateIndex: true, useNewUrlParser: true }, (err, res) => {
-    if (err) throw err;
+mongoose.Promise = Promise;
+mongoose.connection.on('connected', () => {
     console.log('Base de datos Mongoose: \x1b[32m%s\x1b[0m', 'online');
-})
+});
+mongoose.connection.on('reconnected', () => {
+    console.log('Connection Reestablished');
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('Connection Disconnected');
+});
+
+mongoose.connection.on('close', () => {
+    console.log('Connection Closed');
+});
+
+mongoose.connection.on('error', (error) => {
+    console.log('ERROR: ' + error);
+});
+
+const run = async() => {
+    await mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', {
+        autoReconnect: true,
+        reconnectTries: 1000000,
+        reconnectInterval: 3000,
+        useCreateIndex: true,
+        useNewUrlParser: true
+    });
+}
+
+
+run().catch(error => console.error(error));
+//mongoose.connect('mongodb://myDbAdmin:reim*0348@192.168.2.253:27017/reim', { useCreateIndex: true, useNewUrlParser: true }, (err, res) => {
+//  if (err) throw err;
+// console.log('Base de datos Mongoose: \x1b[32m%s\x1b[0m', 'online');
+// })
 
 
 // Rutas
