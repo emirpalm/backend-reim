@@ -2,6 +2,7 @@
 var express = require('express');
 var mdAutenticacion = require('../middlewares/autenticacion');
 var moment = require('moment');
+var mongoose = require('mongoose');
 
 // Inicializar variables
 var app = express();
@@ -9,7 +10,7 @@ var app = express();
 var Maniobra = require('../models/maniobra');
 
 // =======================================
-// Obtener Maniobra
+// Obtener Maniobras
 // =======================================
 app.get('/', (req, res, netx) => {
     var desde = req.query.desde || 0;
@@ -49,6 +50,50 @@ app.get('/', (req, res, netx) => {
                         total: conteo
                     });
 
+                });
+
+            });
+});
+
+// ============================================
+// Obtener Maniobras por contenedor buque viaje
+// ============================================
+app.get('/obtener', (req, res, netx) => {
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+    var contenedor = req.query.contenedor;
+    var viaje = req.query.viaje;
+    var buque = req.query.buque;
+
+    Maniobra.aggregate([{
+                $lookup: {
+                    from: "viajes",
+                    localField: "viaje",
+                    foreignField: "_id",
+                    as: "match"
+                }
+            },
+            {
+                $match: { "contenedor": contenedor, "match.viaje": viaje, "match.buque": new mongoose.Types.ObjectId(buque) }
+            },
+            {
+                $project: {
+                    _id: 1,
+                }
+            }
+        ])
+        .exec(
+            (err, maniobra) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error cargando maniobras',
+                        errors: err
+                    });
+                }
+                res.status(200).json({
+                    ok: true,
+                    maniobra
                 });
 
             });

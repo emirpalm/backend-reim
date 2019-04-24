@@ -31,8 +31,7 @@ var maniobraSchema = new Schema({
         required: [true, 'El id camiones es un campo obligatorio ']
     },
     contenedor: {
-        type: Schema.Types.ObjectId,
-        ref: 'Contenedor',
+        type: String,
         required: [true, 'El id contenedor es un campo obligatorio ']
     },
     cliente: {
@@ -49,6 +48,11 @@ var maniobraSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Viaje',
         required: [true, 'El id Viaje es un campo obligatorio ']
+    },
+    buque: {
+        type: Schema.Types.ObjectId,
+        ref: 'Buque',
+        required: [true, 'El id Buque es un campo obligatorio ']
     },
     imgl: [{
         img: { type: String }

@@ -20,7 +20,8 @@ var solicitudScheme = new Schema({
     contenedores: [{
         Contenedor: { type: String, unique: false, required: [true, 'El contenedor es necesario'] },
         Tipo: { type: String },
-        Estado: { type: String }
+        Estado: { type: String },
+        Maniobra: { type: String }
     }],
     fechaCreado: { type: Date, default: Date.now },
     fechaModificado: { type: Date },
