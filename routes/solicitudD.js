@@ -5,6 +5,7 @@ var mdAutenticacion = require('../middlewares/autenticacion');
 var app = express();
 
 var SolicitudD = require('../models/solicitudD');
+var Prealta = require('../models/prealtamaniobra');
 
 // =======================================
 // Obtener solicitudes
@@ -226,6 +227,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
     });
 
 });
+
 // ==========================================
 // Actualizar Solicitud con maniobra
 // ==========================================
@@ -254,22 +256,8 @@ app.put('/solicitudmaniobra/:id', mdAutenticacion.verificaToken, (req, res) => {
         }
 
 
-        // solicitud.agencia = body.agencia;
-        // solicitud.naviera = body.naviera;
-        // solicitud.transportista = body.transportista;
-        // solicitud.cliente = body.cliente;
-        // solicitud.facturarA = body.facturarA;
-        // solicitud.buque = body.buque;
-        // solicitud.viaje = body.viaje;
-        // solicitud.observaciones = body.observaciones;
-        // solicitud.rutaBL = body.rutaBL;
-        // solicitud.credito = body.credito;
-        // solicitud.rutaComprobante = body.rutaComprobante;
-        // solicitud.correo = body.correo;
-        // solicitud.correoFac = body.CorreoFac;
         solicitud.contenedores = body.contenedores;
         solicitud.fechaModificado = Date.now();
-        // solicitud.tipo = body.tipo;
         solicitud.estatus = "AS";
         solicitud.usuario = req.usuario._id;
 
@@ -283,12 +271,31 @@ app.put('/solicitudmaniobra/:id', mdAutenticacion.verificaToken, (req, res) => {
                 });
             }
 
+
             res.status(200).json({
                 ok: true,
                 solicitud: solicitudGuardado
             });
 
+
+            solicitud.contenedores.forEach((element) => {
+                console.log(element.Maniobra);
+                Prealta.findById(element.Maniobra, (err, prealta) => {
+
+                    prealta.estatus = "APROBADO";
+                    prealta.solicitudD = id;
+
+                    prealta.save((err, prealtaGuardado) => {
+
+
+                    });
+                });
+
+            });
+
+
         });
+
 
     });
 

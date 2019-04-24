@@ -16,6 +16,7 @@ var prealtaScheme = new Schema({
     estado: { type: String },
     destinatario: { type: String, required: false },
     estatus: { type: String, default: 'APROBACIÓN' },
+    solicitudD: { type: Schema.Types.ObjectId, ref: 'Solicitud', required: true },
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true }
 }, { collection: 'maniobras' });
 

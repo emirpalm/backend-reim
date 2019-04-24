@@ -304,7 +304,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
                     tipo: element.Tipo,
                     estado: element.Estado,
                     destinatario: element.Cliente,
-                    estatus: 'EN ESPERA',
+                    estatus: 'APROBADO',
                     usuario: req.usuario._id
                 });
             } else {
